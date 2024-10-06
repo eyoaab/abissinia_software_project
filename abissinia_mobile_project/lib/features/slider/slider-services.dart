@@ -1,8 +1,6 @@
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
 
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
 import 'package:http_parser/http_parser.dart';

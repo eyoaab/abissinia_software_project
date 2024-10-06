@@ -38,6 +38,8 @@ dependencies:
   dartz: ^0.10.1
   http: ^1.2.2
   http_parser: ^4.0.2
+  bloc: ^8.1.4
+  device_preview: ^1.2.0
 
 dev_dependencies:
   flutter_test:
