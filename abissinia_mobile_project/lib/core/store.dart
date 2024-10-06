@@ -17,3 +17,5 @@ InputDecoration commonSerchDecoration = InputDecoration(
     color: Colors.green,
   ),
 );
+
+Color commonColor =  Colors.green;

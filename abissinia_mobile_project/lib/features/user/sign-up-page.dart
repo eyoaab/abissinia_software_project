@@ -1,0 +1,252 @@
+import 'package:abissinia_mobile_project/core/store.dart'; 
+import 'package:abissinia_mobile_project/features/user/login-page.dart';
+import 'package:abissinia_mobile_project/features/user/wiget.dart';
+import 'package:flutter/material.dart';
+
+class SignupPage extends StatefulWidget {
+  @override
+  _SignupPageState createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+
+  String? _emailError;
+  Color _borderColorForEmail = Colors.grey;
+  String? _passwordError;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void clearFields() {
+    _usernameController.clear();
+    _confirmPasswordController.clear();
+    _passwordController.clear();
+    _nameController.clear();
+  }
+
+  void signUpUser() {
+    if (_emailError != null) {
+      return;
+    }
+
+    final name = _nameController.text;
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (password != confirmPassword) {
+      setState(() {
+        _passwordError = 'Passwords do not match';
+      });
+      return;
+    }
+    setState(() {
+      _passwordError = '';
+    });
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
+
+  void _toggleConfirmPasswordVisibility() {
+    setState(() {
+      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+    });
+  }
+
+  void goToLogInPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                const SizedBox(height: 10),
+
+                Text(
+                    'Create An Account for Free',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: commonColor,
+                    ),
+                  ),
+                const SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.asset(
+                    'logo.jpeg',
+                    height: 230,
+                    width: 270, 
+                    fit: BoxFit.cover, 
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: _nameController,
+                  decoration: customInputDecoration(
+                    labelText: 'Name',
+                    suffixIcon: Icon(Icons.person, color: commonColor),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Email',
+                    suffixIcon: Icon(Icons.email, color: commonColor),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: _borderColorForEmail, width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: commonColor, width: 2.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                    focusedErrorBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      setState(() {
+                        _emailError = 'Please enter your email address';
+                        _borderColorForEmail = Colors.red;
+                      });
+                    } else if (!isValidEmail(value)) {
+                      setState(() {
+                        _emailError = 'Please enter a valid email';
+                        _borderColorForEmail = Colors.red;
+                      });
+                    } else {
+                      setState(() {
+                        _emailError = null;
+                        _borderColorForEmail = commonColor;
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 10),
+                if (_emailError != null)
+                  Text(
+                    _emailError!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: _passwordController,
+                  obscureText: !_isPasswordVisible,
+                  decoration: passwordInputDecoration(
+                    labelText: 'Password',
+                    isPasswordVisible: _isPasswordVisible,
+                    togglePasswordVisibility: _togglePasswordVisibility,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                TextField(
+                  controller: _confirmPasswordController,
+                  obscureText: !_isConfirmPasswordVisible,
+                  decoration: passwordInputDecoration(
+                    labelText: 'Confirm Password',
+                    isPasswordVisible: _isConfirmPasswordVisible,
+                    togglePasswordVisibility: _toggleConfirmPasswordVisibility,
+                  ),
+                ),
+                if (_passwordError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      _passwordError!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                const SizedBox(height: 30),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: signUpUser,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      backgroundColor: commonColor,
+                    ),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 21,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+
+                TextButton(
+                  onPressed: goToLogInPage,
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Already have an account? ",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Log in',
+                          style: TextStyle(
+                            color: commonColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
