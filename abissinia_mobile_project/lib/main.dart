@@ -1,6 +1,7 @@
 import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
 import 'package:abissinia_mobile_project/features/blog/widgets.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
+import 'package:abissinia_mobile_project/features/testimoney/testimony-page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         // Setting default text styles
       
       ),
-      home:  const FaqPage()
+      home:  const TestimonyPage()
     );
   }
 }
