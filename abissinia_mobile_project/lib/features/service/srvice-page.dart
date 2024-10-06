@@ -1,7 +1,7 @@
-import 'package:abissinia_mobile_project/core/store.dart';
-import 'package:abissinia_mobile_project/features/service/service-entity.dart';
 import 'package:abissinia_mobile_project/features/service/widge.dart';
 import 'package:flutter/material.dart';
+import 'package:abissinia_mobile_project/features/service/service-entity.dart';
+import 'package:abissinia_mobile_project/features/testimoney/testimony-page.dart';
 
 class ServicePage extends StatefulWidget {
   const ServicePage({Key? key}) : super(key: key);
@@ -11,37 +11,39 @@ class ServicePage extends StatefulWidget {
 }
 
 class _ServicePageState extends State<ServicePage> {
-  final List<ServiceEntity> dammyService = [
-
-    ServiceEntity(id: 1, title: 'First Service', description: 'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class. Pages in Flutter are usually widgets, and you can push a new page onto the stack (navigate to another page) or pop a page off the stack (go back to the previous page).', 
-    image:  'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
-     pricing: 4000.0,
-      category: 'no Catagory', 
-      time: 'time of saved'),
-
-          ServiceEntity(id: 1, title: 'First Service', description: 'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class. Pages in Flutter are usually widgets, and you can push a new page onto the stack (navigate to another page) or pop a page off the stack (go back to the previous page).', 
-    image:  'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
-     pricing: 4000.0,
-      category: 'no Catagory', 
-      time: 'time of saved'),
-
-          ServiceEntity(id: 1, title: 'First Service', description: 'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class. Pages in Flutter are usually widgets, and you can push a new page onto the stack (navigate to another page) or pop a page off the stack (go back to the previous page).', 
-    image:  'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
-     pricing: 4000.0,
-      category: 'no Catagory', 
-      time: 'time of saved'),
-
-          ServiceEntity(id: 1, title: 'First Service', description: 'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class. Pages in Flutter are usually widgets, and you can push a new page onto the stack (navigate to another page) or pop a page off the stack (go back to the previous page).', 
-    image:  'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
-     pricing: 4000.0,
-      category: 'no Catagory', 
-      time: 'time of saved'),
-
-          ServiceEntity(id: 1, title: 'First Service', description: 'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class. Pages in Flutter are usually widgets, and you can push a new page onto the stack (navigate to another page) or pop a page off the stack (go back to the previous page).', 
-    image:  'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
-     pricing: 4000.0,
-      category: 'no Catagory', 
-      time: 'time of saved'),
+  final List<ServiceEntity> dummyService = [
+    ServiceEntity(
+      id: 1,
+      title: 'First Service',
+      description:
+          'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class.',
+      image:
+          'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
+      pricing: 4000.0,
+      category: 'no Category',
+      time: 'time of saved',
+    ),
+    ServiceEntity(
+      id: 1,
+      title: 'First Service',
+      description:
+          'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class.',
+      image:
+          'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
+      pricing: 4000.0,
+      category: 'no Category',
+      time: 'time of saved',
+    ),ServiceEntity(
+      id: 1,
+      title: 'First Service',
+      description:
+          'In Flutter, navigating between pages (or screens) is commonly done using the Navigator class.',
+      image:
+          'https://hips.hearstapps.com/hmg-prod/images/2022-ford-mustang-stealth-edition-02-1633475393.jpg?crop=0.671xw:1.00xh;0.125xw,0&resize=1200',
+      pricing: 4000.0,
+      category: 'no Category',
+      time: 'time of saved',
+    ),
   ];
 
   List<ServiceEntity> filteredService = [];
@@ -50,21 +52,19 @@ class _ServicePageState extends State<ServicePage> {
   @override
   void initState() {
     super.initState();
-    filteredService = dammyService;
+    filteredService = dummyService;
   }
 
   void _filterServices(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        filteredService = dammyService; 
-      });
-    } else {
-      setState(() {
-        filteredService = dammyService.where((blog) {
-          return blog.title.toLowerCase().contains(query.toLowerCase());
+    setState(() {
+      if (query.isEmpty) {
+        filteredService = dummyService;
+      } else {
+        filteredService = dummyService.where((service) {
+          return service.title.toLowerCase().contains(query.toLowerCase());
         }).toList();
-      });
-    }
+      }
+    });
   }
 
   @override
@@ -72,47 +72,54 @@ class _ServicePageState extends State<ServicePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 20.0
-          
+          toolbarHeight: 20.0,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Column(
             children: [
               Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: commonSerchDecoration,
-                    onChanged: (value) {
-                      searchQuery = value;
-                      _filterServices(searchQuery);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8), 
-                const Icon(
-                  Icons.menu,
-                  color: Colors.green,
-                ),
-              ],
-            ),
-              const SizedBox(height: 16), 
-              filteredService.isEmpty 
-                  ? const Center(
-                      child: Text(
-                        'No Services found',
-                        style: TextStyle(color: Colors.grey, fontSize: 20), 
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'Search services',
+                        border: OutlineInputBorder(),
                       ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
+                      onChanged: (value) {
+                        searchQuery = value;
+                        _filterServices(searchQuery);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.menu,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const TestimonyPage(), 
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: filteredService.length,
                         itemBuilder: (context, index) {
-                          return ServiceCard(serviceEntity: filteredService[index],isAdmin:true);
+                          return ServiceCard(
+                            serviceEntity: filteredService[index],
+                            isAdmin: true,
+                          );
                         },
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

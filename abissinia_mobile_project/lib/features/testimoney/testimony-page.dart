@@ -60,43 +60,49 @@ class _TestimonyPageState extends State<TestimonyPage> {
 
   @override
   void dispose() {
-    _timer.cancel(); 
+    _timer.cancel();
     _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Align(
-            alignment: Alignment.bottomCenter, 
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: dummyTestimonials.isEmpty
-                  ? const Center(
-                      child: Text(''),
-                    )
-                  : PageView.builder(
-                      controller: _pageController,
-                      itemCount: dummyTestimonials.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TestimonialCard(
-                            testimonyEntity: dummyTestimonials[index],
-                            isAdmin: true,
-                          ),
-                        );
-                      },
-                    ),
+    return Container(
+      height: 380,
+      child: Column(
+        children: [
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: dummyTestimonials.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No Testimonials Available',
+                          style: TextStyle(color: Colors.grey, fontSize: 20),
+                        ),
+                      )
+                    : PageView.builder(
+                        controller: _pageController,
+                        itemCount: dummyTestimonials.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: TestimonialCard(
+                              testimonyEntity: dummyTestimonials[index],
+                              isAdmin: true,
+                            ),
+                          );
+                        },
+                      ),
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-      ],
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }
