@@ -79,15 +79,15 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
 
                 Text(
                     'Create An Account for Free',

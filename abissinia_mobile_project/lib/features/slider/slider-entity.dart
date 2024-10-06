@@ -5,8 +5,6 @@ class SlidersSend{
     String title;
     String description;
     File image; 
-
-    
    SlidersSend({
       required this.id,
       required this.title,
@@ -27,12 +25,10 @@ class SlidersSend{
 
 
  class SliderEntity {
-            final int id;
-            final String title;
-            final String description;
-            final String image;
-          
-
+  final int id;
+  final String title;
+  final String description;
+  final String image;
   SliderEntity({
     required this.id,
     required this.title,
