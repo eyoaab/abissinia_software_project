@@ -1,5 +1,5 @@
 class FaqEntity {
-  final String id;
+  final int id;
   final String question;
   final String answer;
 
@@ -11,7 +11,7 @@ class FaqEntity {
 
   factory FaqEntity.fromJson(Map<String, dynamic> json) {
     return FaqEntity(
-      id: json['id'] as String,
+      id: json['id'] as int,
       question: json['question'] as String,
       answer: json['answer'] as String,
     );
