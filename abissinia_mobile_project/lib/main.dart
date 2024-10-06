@@ -3,6 +3,7 @@ import 'package:abissinia_mobile_project/features/blog/widgets.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
+import 'package:abissinia_mobile_project/features/slider/slider-page.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-page.dart';
 import 'package:abissinia_mobile_project/features/user/login-page.dart';
 import 'package:abissinia_mobile_project/features/user/sign-up-page.dart';
