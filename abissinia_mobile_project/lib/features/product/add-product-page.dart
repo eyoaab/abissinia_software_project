@@ -6,12 +6,12 @@ import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
 
-class AddProduct extends StatefulWidget {
+class AddProductPage extends StatefulWidget {
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddProductPageState createState() => _AddProductPageState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddProductPageState extends State<AddProductPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();

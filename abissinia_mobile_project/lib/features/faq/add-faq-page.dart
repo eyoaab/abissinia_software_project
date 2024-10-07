@@ -1,32 +1,31 @@
-import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
+import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
 
-class AddBlogPage extends StatefulWidget {
+class AddFaqPage extends StatefulWidget {
   @override
-  _AddBlogPageState createState() => _AddBlogPageState();
+  _AddFaqPageState createState() => _AddFaqPageState();
 }
 
-class _AddBlogPageState extends State<AddBlogPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _catagoryController = TextEditingController(); 
+class _AddFaqPageState extends State<AddFaqPage> {
+  final TextEditingController _questionController = TextEditingController();
+  final TextEditingController _answerController = TextEditingController(); 
 
 
   void _clearAllFields() {
     setState(() {
-      _nameController.clear();
-      _descriptionController.clear();
-      _catagoryController.clear(); 
+      _questionController.clear();
+      _answerController.clear();
+     
     });
   }
 
-  void _saveBlog() {
-    if (_nameController.text.isEmpty ||
-        _descriptionController.text.isEmpty ||
-        _catagoryController.text.isEmpty) {
+  void _saveTestimony() {
+    if (_questionController.text.isEmpty ||
+        _answerController.text.isEmpty) {
       
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields and add at least one feature')),
@@ -34,12 +33,11 @@ class _AddBlogPageState extends State<AddBlogPage> {
       return;
     }
 
-    final BlogEntity blogEntity  = BlogEntity(
+    final FaqEntity faqEntity  = FaqEntity(
       id: 0,
-      title: _nameController.text.trim(),
-      description: _descriptionController.text.trim(),
-      category: _catagoryController.text.trim(),
-       date: '',
+     question: _questionController.text.trim(),
+     answer: _answerController.text.trim(),
+     
     );
 
     _clearAllFields();
@@ -60,7 +58,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
               MaterialPageRoute(builder: (context) => const AddPage()),
             ),
           ),
-          title: const Text('Add Blog', style: TextStyle(color: Colors.black)),
+          title: const Text('Add FAQ', style: TextStyle(color: Colors.black)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
@@ -70,19 +68,15 @@ class _AddBlogPageState extends State<AddBlogPage> {
              
               const SizedBox(height: 40),
               TextField(
-                controller: _nameController,
-                decoration: decorateInput('Title'),
+                controller: _questionController,
+                decoration: decorateInput('Question'),
               ),
               const SizedBox(height: 30),
-              TextField(
-                controller: _catagoryController,
-                decoration: decorateInput('Catagory'),
-              ),
-              
+             
               const SizedBox(height: 30),
               TextField(
-                controller: _descriptionController,
-                decoration: decorateInput('Description'),
+                controller: _answerController,
+                decoration: decorateInput('Answer'),
                 maxLines: 3,
               ),
               
@@ -95,7 +89,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(
-                        onPressed: _saveBlog,
+                        onPressed: _saveTestimony,
                         style: OutlinedButton.styleFrom(
                           backgroundColor: commonColor,
                           side: BorderSide(color: commonColor, width: 2),
@@ -107,7 +101,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                         child: const Text('ADD', style: TextStyle(color: Colors.white)),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(

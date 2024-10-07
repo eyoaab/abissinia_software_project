@@ -1,31 +1,61 @@
-import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'dart:io';
+import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:abissinia_mobile_project/features/service/service-entity.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
-import 'package:abissinia_mobile_project/features/product/widget.dart';
 
-class AddBlogPage extends StatefulWidget {
+
+class AddServicePage extends StatefulWidget {
   @override
-  _AddBlogPageState createState() => _AddBlogPageState();
+  _AddServicePageState createState() => _AddServicePageState();
 }
 
-class _AddBlogPageState extends State<AddBlogPage> {
+class _AddServicePageState extends State<AddServicePage> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _catagoryController = TextEditingController(); 
+  final TextEditingController _tiemController = TextEditingController(); 
 
+
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error picking image: $e')),
+      );
+    }
+  }
 
   void _clearAllFields() {
     setState(() {
       _nameController.clear();
+      _priceController.clear();
       _descriptionController.clear();
-      _catagoryController.clear(); 
+      _catagoryController.clear();
+      _image = null;
+      _tiemController.clear();
+
     });
   }
 
-  void _saveBlog() {
+  void _saveService() {
     if (_nameController.text.isEmpty ||
+        _priceController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
+        _image == null ||
+        _tiemController.text.isEmpty||
         _catagoryController.text.isEmpty) {
       
       ScaffoldMessenger.of(context).showSnackBar(
@@ -34,12 +64,15 @@ class _AddBlogPageState extends State<AddBlogPage> {
       return;
     }
 
-    final BlogEntity blogEntity  = BlogEntity(
+    final ServiceSend serviceSend = ServiceSend(
       id: 0,
       title: _nameController.text.trim(),
       description: _descriptionController.text.trim(),
+      image: _image!,
+      price: double.parse(_priceController.text.trim()),
       category: _catagoryController.text.trim(),
-       date: '',
+      time: _tiemController.text.trim()
+
     );
 
     _clearAllFields();
@@ -60,42 +93,67 @@ class _AddBlogPageState extends State<AddBlogPage> {
               MaterialPageRoute(builder: (context) => const AddPage()),
             ),
           ),
-          title: const Text('Add Blog', style: TextStyle(color: Colors.black)),
+          title: const Text('Add Service', style: TextStyle(color: Colors.black)),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
+          padding: const EdgeInsets.fromLTRB(25, 10, 25, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
-              const SizedBox(height: 40),
+              GestureDetector(
+                onTap: () => _pickImage(ImageSource.gallery),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Center(
+                    child: _image == null
+                        ? Icon(Icons.camera_alt, size: 55, color: commonColor)
+                        : Image.file(_image!, width: double.infinity, fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
               TextField(
                 controller: _nameController,
                 decoration: decorateInput('Title'),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               TextField(
-                controller: _catagoryController,
-                decoration: decorateInput('Catagory'),
+                controller: _priceController,
+                decoration: decorateInput('Price'),
+                keyboardType: TextInputType.number,
               ),
-              
-              const SizedBox(height: 30),
+              const SizedBox(height: 15),
               TextField(
                 controller: _descriptionController,
                 decoration: decorateInput('Description'),
                 maxLines: 3,
               ),
+              const SizedBox(height: 15),
+              TextField(
+                      controller: _catagoryController,
+                      decoration: decorateInput('Catagory'),
+                    ),
+              const SizedBox(height: 15),
               
-             
-           
-              const SizedBox(height: 40),
+              TextField(
+                      controller: _tiemController,
+                      decoration: decorateInput('Time Needed'),
+                    ),
+              
+              const SizedBox(height: 15),
               Center(
                 child: Column(
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(
-                        onPressed: _saveBlog,
+                        onPressed: _saveService,
                         style: OutlinedButton.styleFrom(
                           backgroundColor: commonColor,
                           side: BorderSide(color: commonColor, width: 2),
@@ -107,7 +165,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                         child: const Text('ADD', style: TextStyle(color: Colors.white)),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(

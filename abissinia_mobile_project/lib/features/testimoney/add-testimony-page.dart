@@ -1,32 +1,32 @@
-import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
 
-class AddBlogPage extends StatefulWidget {
+class AddTestimonyPage extends StatefulWidget {
   @override
-  _AddBlogPageState createState() => _AddBlogPageState();
+  _AddTestimonyPageState createState() => _AddTestimonyPageState();
 }
 
-class _AddBlogPageState extends State<AddBlogPage> {
-  final TextEditingController _nameController = TextEditingController();
+class _AddTestimonyPageState extends State<AddTestimonyPage> {
+  final TextEditingController _serviceController = TextEditingController();
+  final TextEditingController _campanyController = TextEditingController(); 
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _catagoryController = TextEditingController(); 
 
 
   void _clearAllFields() {
     setState(() {
-      _nameController.clear();
+      _serviceController.clear();
       _descriptionController.clear();
-      _catagoryController.clear(); 
+      _campanyController.clear(); 
     });
   }
 
-  void _saveBlog() {
-    if (_nameController.text.isEmpty ||
+  void _saveTestimony() {
+    if (_serviceController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
-        _catagoryController.text.isEmpty) {
+        _campanyController.text.isEmpty) {
       
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields and add at least one feature')),
@@ -34,12 +34,12 @@ class _AddBlogPageState extends State<AddBlogPage> {
       return;
     }
 
-    final BlogEntity blogEntity  = BlogEntity(
+    final TestimonyEntity testimonyEntity  = TestimonyEntity(
       id: 0,
-      title: _nameController.text.trim(),
+     service: _serviceController.text.trim(),
+     company: _campanyController.text.trim(),
       description: _descriptionController.text.trim(),
-      category: _catagoryController.text.trim(),
-       date: '',
+     
     );
 
     _clearAllFields();
@@ -60,7 +60,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
               MaterialPageRoute(builder: (context) => const AddPage()),
             ),
           ),
-          title: const Text('Add Blog', style: TextStyle(color: Colors.black)),
+          title: const Text('Add Testimony', style: TextStyle(color: Colors.black)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
@@ -70,13 +70,13 @@ class _AddBlogPageState extends State<AddBlogPage> {
              
               const SizedBox(height: 40),
               TextField(
-                controller: _nameController,
-                decoration: decorateInput('Title'),
+                controller: _serviceController,
+                decoration: decorateInput('Service'),
               ),
               const SizedBox(height: 30),
               TextField(
-                controller: _catagoryController,
-                decoration: decorateInput('Catagory'),
+                controller: _campanyController,
+                decoration: decorateInput('Company'),
               ),
               
               const SizedBox(height: 30),
@@ -95,7 +95,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(
-                        onPressed: _saveBlog,
+                        onPressed: _saveTestimony,
                         style: OutlinedButton.styleFrom(
                           backgroundColor: commonColor,
                           side: BorderSide(color: commonColor, width: 2),
