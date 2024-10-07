@@ -1,3 +1,4 @@
+import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
 import 'package:abissinia_mobile_project/features/blog/widgets.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
       
       ),
-      home: const ProductPage()
+      home: const AddPage()
       
     );
   }

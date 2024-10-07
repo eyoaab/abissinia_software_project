@@ -96,3 +96,27 @@ class ProductCard extends StatelessWidget {
 
  
 }
+
+InputDecoration decorateInput(String hintText) {
+  return InputDecoration(
+    hintText: hintText, // Dynamic hint text
+    filled: true,
+    fillColor: Colors.white, // White background
+    border: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderSide: BorderSide(color: Colors.grey), // Grey border
+    ),
+    enabledBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderSide: BorderSide(color: Colors.grey), // Grey border for enabled state
+    ),
+    focusedBorder: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderSide: BorderSide(color: Colors.blue), // Blue border when focused
+    ),
+  );
+}
+
+
+
+const styleText =  TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
