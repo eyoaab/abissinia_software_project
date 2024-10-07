@@ -13,8 +13,8 @@ class Blogpage extends StatefulWidget {
 class _BlogpageState extends State<Blogpage> {
   final List<BlogEntity> dammyBlog = [
     BlogEntity(id: 1, title: 'Now, if there are', description: 'Now, if there are no matching blog entries after a search, the user will see a message in the center of the screen indicating that no blogs were found. This enhances the user experience by providing clear feedback.', date: 'jun-32-2025', category: ''),
-    BlogEntity(id: 2, title: 'Another Blog Title', description: 'This is another blog post description that provides insights.', date: 'jun-30-2025', category: ''),
-    BlogEntity(id: 3, title: 'Third Blog Example', description: 'Yet another example of a blog post for demonstration purposes.', date: 'jun-29-2025', category: ''),
+    BlogEntity(id: 2, title: 'Another Blog Title', description: 'This is another blog post description that provides insights.', date: 'jun-30-2025', category: 'logs were found. This enhances the user'),
+    BlogEntity(id: 3, title: 'Third Blog Example', description: 'Yet another example of a blog post for demonstration purposes.', date: 'jun-29-2025', category: 'logs were found. This enhances the user'),
   ];
 
   List<BlogEntity> filteredBlog = [];

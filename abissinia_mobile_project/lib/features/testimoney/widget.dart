@@ -1,3 +1,4 @@
+import 'package:abissinia_mobile_project/features/testimoney/update-testimony-page.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 
@@ -74,6 +75,10 @@ class TestimonialCard extends StatelessWidget {
                     icon: const Icon(Icons.edit,size:30),
                     color: Colors.blue,
                     onPressed: () {
+                       Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  UpdateTestimonyPage(testimonyEntity: testimonyEntity,)),
+            );
                       
                     },
                   ),

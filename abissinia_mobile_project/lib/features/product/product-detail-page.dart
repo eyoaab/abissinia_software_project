@@ -1,5 +1,6 @@
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
+import 'package:abissinia_mobile_project/features/product/update-product-page.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -141,9 +142,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                           Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  UpdateProductPage(productEntity: widget.productEntity,)),
+            );
+                        },
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor:commonColor,
                           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 30.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),

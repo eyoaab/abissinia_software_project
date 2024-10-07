@@ -1,4 +1,6 @@
+import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
+import 'package:abissinia_mobile_project/features/slider/update-slider-page.dart';
 import 'package:flutter/material.dart';
 
 class SliderCard extends StatelessWidget {
@@ -72,8 +74,12 @@ class SliderCard extends StatelessWidget {
                 children: [
                   if (isAdmin)
                     IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue,size :40),
+                      icon:  Icon(Icons.edit, color: commonColor,size :40),
                       onPressed: () {
+                        Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  UpdateSliderPage(slider:sliderEntity)),
+            ) ;
                       },
                     ),
                   Expanded(

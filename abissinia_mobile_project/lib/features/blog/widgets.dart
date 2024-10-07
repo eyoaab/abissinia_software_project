@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'package:abissinia_mobile_project/features/blog/update-blog-page.dart';
 import 'package:flutter/material.dart';
 
 class BlogCard extends StatefulWidget {
@@ -64,6 +65,10 @@ class _BlogCardState extends State<BlogCard> {
                     IconButton(
                       icon: const Icon(Icons.edit, color: Colors.blue),
                       onPressed: () {
+                        Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  UpdateBlogPage(blogEntity: widget.blog,)),
+            );
                       },
                     ),
                   GestureDetector(

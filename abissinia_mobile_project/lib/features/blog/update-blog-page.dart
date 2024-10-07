@@ -1,51 +1,66 @@
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
 
-class AddBlogPage extends StatefulWidget {
+class UpdateBlogPage extends StatefulWidget {
+  final BlogEntity blogEntity;
+
+  const UpdateBlogPage({Key? key, required this.blogEntity}) : super(key: key);
+
   @override
-  _AddBlogPageState createState() => _AddBlogPageState();
+  _UpdateBlogPageState createState() => _UpdateBlogPageState();
 }
 
-class _AddBlogPageState extends State<AddBlogPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _catagoryController = TextEditingController(); 
+class _UpdateBlogPageState extends State<UpdateBlogPage> {
+  late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _catagoryController;
 
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.blogEntity.title);
+    _descriptionController = TextEditingController(text: widget.blogEntity.description);
+    _catagoryController = TextEditingController(text: widget.blogEntity.category);
+  }
 
   void _clearAllFields() {
     setState(() {
       _nameController.clear();
       _descriptionController.clear();
-      _catagoryController.clear(); 
+      _catagoryController.clear();
     });
   }
 
-  void _saveBlog() {
+  void _updateBlog() {
     if (_nameController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         _catagoryController.text.isEmpty) {
-      
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
+        const SnackBar(content: Text('Please fill all fields')),
       );
       return;
     }
 
-    final BlogEntity blogEntity  = BlogEntity(
-      id: 0,
+    final BlogEntity updatedBlogEntity = BlogEntity(
+      id: widget.blogEntity.id, 
       title: _nameController.text.trim(),
       description: _descriptionController.text.trim(),
       category: _catagoryController.text.trim(),
-       date: '',
+      date: widget.blogEntity.date, 
+    );
+
+  
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Blog updated successfully!')),
     );
 
     _clearAllFields();
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +72,16 @@ class _AddBlogPageState extends State<AddBlogPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddPage()),
+              MaterialPageRoute(builder: (context) => const Blogpage()),
             ),
           ),
-          title: const Text('Add Blog', style: TextStyle(color: Colors.black)),
+          title: const Text('Update Blog', style: TextStyle(color: Colors.black)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
               const SizedBox(height: 40),
               TextField(
                 controller: _nameController,
@@ -76,18 +90,14 @@ class _AddBlogPageState extends State<AddBlogPage> {
               const SizedBox(height: 30),
               TextField(
                 controller: _catagoryController,
-                decoration: decorateInput('Catagory'),  
+                decoration: decorateInput('Category'),
               ),
-              
               const SizedBox(height: 30),
               TextField(
                 controller: _descriptionController,
                 decoration: decorateInput('Description'),
                 maxLines: 3,
               ),
-              
-             
-           
               const SizedBox(height: 40),
               Center(
                 child: Column(
@@ -95,7 +105,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(
-                        onPressed: _saveBlog,
+                        onPressed: _updateBlog,
                         style: OutlinedButton.styleFrom(
                           backgroundColor: commonColor,
                           side: BorderSide(color: commonColor, width: 2),
@@ -104,7 +114,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                         ),
-                        child: const Text('ADD', style: TextStyle(color: Colors.white)),
+                        child: const Text('UPDATE', style: TextStyle(color: Colors.white)),
                       ),
                     ),
                     const SizedBox(height: 20),

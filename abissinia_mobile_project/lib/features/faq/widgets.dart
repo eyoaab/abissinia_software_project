@@ -1,4 +1,5 @@
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
+import 'package:abissinia_mobile_project/features/faq/update-feq.dart';
 import 'package:flutter/material.dart';
 
 class FaqCard extends StatefulWidget {
@@ -74,6 +75,11 @@ class _FaqCardState extends State<FaqCard> with SingleTickerProviderStateMixin {
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.blue),
             onPressed: () {
+               Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  UpdateFaqPage(faqEntity: widget.faq,)),
+            );
+              
             },
           ),
         GestureDetector(

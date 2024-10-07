@@ -1,5 +1,6 @@
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/service/service-entity.dart';
+import 'package:abissinia_mobile_project/features/service/update-services-page.dart';
 import 'package:flutter/material.dart';
 
 class ServiceDetailPage extends StatefulWidget {
@@ -141,6 +142,10 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                   children: [
                     OutlinedButton(
                       onPressed: () {
+                        Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) =>  UpdateServicePage(service: widget.serviceEntity,)),
+            );
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.blue,
