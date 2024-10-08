@@ -1,14 +1,18 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:http/http.dart' as http;
 
+
+class FaqService{
 
 
 
 Future<FaqModel> createFaq(FaqEntity faq) async {
   try {
     final response = await http.post(
-      Uri.parse(''),
+      Uri.parse(Url.faqUrl()),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         "question": faq.question,
@@ -32,9 +36,10 @@ Future<FaqModel> createFaq(FaqEntity faq) async {
 Future<List<FaqEntity>> getAllFaqs() async {
   try {
     final response = await http.get(
-      Uri.parse(''),
+      Uri.parse(Url.faqUrl()),
       headers: {'Content-Type': 'application/json'},
     );
+    log(response.body);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['faqs'];
@@ -56,7 +61,7 @@ Future<List<FaqEntity>> getAllFaqs() async {
 Future<FaqModel> updateFaq(FaqEntity faq) async {
   try {
     final response = await http.put(
-      Uri.parse(''),
+      Uri.parse(Url.faqUrlById(faq.id.toString())),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(faq.toJson()),
     );
@@ -80,11 +85,11 @@ Future<FaqModel> updateFaq(FaqEntity faq) async {
 Future<FaqModel> deleteFaq(String id) async {
   try {
     final response = await http.delete(
-      Uri.parse('/$id'),
+      Uri.parse(Url.faqUrlById(id)),
       headers: {'Content-Type': 'application/json'},
     );
 
-    if (response.statusCode == 204) {
+    if (response.statusCode == 204 || response.statusCode == 200 ) {
         var faqModel = const FaqModel(responseMessage: 'FAQ dedleted successfully', isRight: true);
       return faqModel;
     } else {
@@ -95,4 +100,6 @@ Future<FaqModel> deleteFaq(String id) async {
      var faqModel =  FaqModel(responseMessage: 'Error occurred: $error', isRight: false);
       return faqModel;
   }
+}
+
 }

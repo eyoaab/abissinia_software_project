@@ -1,9 +1,11 @@
+import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateFaqPage extends StatefulWidget {
   final FaqEntity faqEntity; 
@@ -45,10 +47,32 @@ class _UpdateFaqPageState extends State<UpdateFaqPage> {
       question: _questionController.text.trim(),
       answer: _answerController.text.trim(),
     );
+    BlocProvider.of<FaqBloc>(context).add(UpdateFaqEvent(faqEntity: updatedFaqEntity));
 
-    _clearAllFields();
+  }
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 16),
+              Text('Updating faq...'),
+            ],
+          ),
+        );
+      },
+    );
   }
 
+  void _dismissLoadingDialog() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -64,7 +88,27 @@ class _UpdateFaqPageState extends State<UpdateFaqPage> {
           ),
           title: const Text('Update FAQ', style: TextStyle(color: Colors.black)),
         ),
-        body: SingleChildScrollView(
+        body: BlocListener<FaqBloc, FaqState>(
+          listener: (context, state) {
+            if (state is FaqUpdateLoadingState) {
+              _showLoadingDialog();
+            } else if (state is UpdateFaqState) {
+              _dismissLoadingDialog();
+              showCustomSnackBar(context, state.faqModel.responseMessage, state.faqModel.isRight);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const FaqPage()),
+              );
+            } else if (state is FaqErrorState) {
+              _dismissLoadingDialog();
+              showCustomSnackBar(context, state.message, false);
+            }
+          },
+        
+        
+        
+        
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,6 +165,7 @@ class _UpdateFaqPageState extends State<UpdateFaqPage> {
           ),
         ),
       ),
+    ),
     );
   }
 }

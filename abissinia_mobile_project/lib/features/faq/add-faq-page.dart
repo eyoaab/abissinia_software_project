@@ -1,9 +1,11 @@
+import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddFaqPage extends StatefulWidget {
   @override
@@ -22,13 +24,34 @@ class _AddFaqPageState extends State<AddFaqPage> {
      
     });
   }
-
+   void _showLoadingDialog(String message) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (context) {
+      return AlertDialog(
+        content: Container(
+          width: 300, 
+          padding: const EdgeInsets.all(16.0), 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+               CircularProgressIndicator(color: commonColor,),
+              const SizedBox(width: 16),
+              Expanded(child: Text(message, textAlign: TextAlign.center)), 
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
   void _saveTestimony() {
     if (_questionController.text.isEmpty ||
         _answerController.text.isEmpty) {
       
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
+        const SnackBar(content: Text('Please fill all fields')),
       );
       return;
     }
@@ -39,8 +62,9 @@ class _AddFaqPageState extends State<AddFaqPage> {
      answer: _answerController.text.trim(),
      
     );
+    BlocProvider.of<FaqBloc>(context).add(AddFaqEvent(faqEntity: faqEntity));
 
-    _clearAllFields();
+
   }
 
  
@@ -60,7 +84,25 @@ class _AddFaqPageState extends State<AddFaqPage> {
           ),
           title: const Text('Add FAQ', style: TextStyle(color: Colors.black)),
         ),
-        body: SingleChildScrollView(
+        body:BlocListener<FaqBloc, FaqState>(
+          listener: (context, state) {
+            if (state is FaqAddLoadingState) {
+              _showLoadingDialog('Creating a Faq');
+               
+            }
+
+            if (state is AddFaqState) {
+              Navigator.pop(context); 
+              showCustomSnackBar(context, state.faqModel.responseMessage, state.faqModel.isRight);
+              _clearAllFields();
+            }
+
+            if (state is FaqErrorState) {
+              Navigator.pop(context);
+              showCustomSnackBar(context, state.message, false);
+            }
+          },
+        child:SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,6 +165,7 @@ class _AddFaqPageState extends State<AddFaqPage> {
           ),
         ),
       ),
+    ),
     );
   }
 }

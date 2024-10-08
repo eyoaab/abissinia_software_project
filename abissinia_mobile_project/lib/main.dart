@@ -2,6 +2,7 @@ import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/blog/bloc/blog_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/blog-servise.dart';
 import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
+import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => BlogBloc(), 
         ),
+         BlocProvider(
+          create: (context) => FaqBloc(), 
+        ),
       ],
       child: MaterialApp(
         locale: DevicePreview.locale(context),
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.black),
           ),
         ),
-        home: const AddPage(),
+        home: const FaqPage(),
       ),
     );
   }

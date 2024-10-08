@@ -1,6 +1,8 @@
+import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:abissinia_mobile_project/features/faq/update-feq.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FaqCard extends StatefulWidget {
   final FaqEntity faq;
@@ -51,7 +53,7 @@ class _FaqCardState extends State<FaqCard> with SingleTickerProviderStateMixin {
       builder: (context, child) {
         return ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: isExpanded ? _controller.value * 200 : 0, 
+            maxHeight: isExpanded ? _controller.value * 300 : 0, 
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -94,6 +96,7 @@ class _FaqCardState extends State<FaqCard> with SingleTickerProviderStateMixin {
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () {
+            BlocProvider.of<FaqBloc>(context).add(DeleteFaqEvent(id: widget.faq.id));
             },
           ),
       ],

@@ -1,7 +1,9 @@
 import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:abissinia_mobile_project/features/faq/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FaqPage extends StatefulWidget {
   const FaqPage({Key? key}) : super(key: key);
@@ -11,37 +13,16 @@ class FaqPage extends StatefulWidget {
 }
 
 class _FaqPageState extends State<FaqPage> {
-  final List<FaqEntity> dammyFaq = [
-    FaqEntity(id: 1, question: 'Now, if there are', answer: 'Now, if there are no matching faq entries after a search, the user will see a message in the center of the screen indicating that no faqs were found. This enhances the user experience by providing clear feedback.'),
-    FaqEntity(id: 1, question: 'Now, if there are', answer: 'Now, if there are no matching faq entries after a search, the user will see a message in the center of the screen indicating that no faqs were found. This enhances the user experience by providing clear feedback.'),
-    FaqEntity(id: 1, question: 'Now, if there are', answer: 'Now, if there are no matching faq entries after a search, the user will see a message in the center of the screen indicating that no faqs were found. This enhances the user experience by providing clear feedback.'),
-    FaqEntity(id: 1, question: 'Now, if there are', answer: 'Now, if there are no matching faq entries after a search, the user will see a message in the center of the screen indicating that no faqs were found. This enhances the user experience by providing clear feedback.'),
-    FaqEntity(id: 1, question: 'Now, if there are', answer: 'Now, if there are no matching faq entries after a search, the user will see a message in the center of the screen indicating that no faqs were found. This enhances the user experience by providing clear feedback.'),
-    FaqEntity(id: 1, question: 'Now, if there are', answer: 'Now, if there are no matching faq entries after a search, the user will see a message in the center of the screen indicating that no faqs were found. This enhances the user experience by providing clear feedback.'),
-  ];
 
-  List<FaqEntity> filteredfaq = [];
   String searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    filteredfaq = dammyFaq;
+      context.read<FaqBloc>().add(LoadAllFaqEvent());
   }
 
-  void _filterfaqs(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        filteredfaq = dammyFaq; 
-      });
-    } else {
-      setState(() {
-        filteredfaq = dammyFaq.where((faq) {
-          return faq.question.toLowerCase().contains(query.toLowerCase());
-        }).toList();
-      });
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +59,9 @@ class _FaqPageState extends State<FaqPage> {
                       decoration: commonSerchDecoration,
                       onChanged: (value) {
                         searchQuery = value;
-                        _filterfaqs(searchQuery);
+                        setState(() {
+                          searchQuery = value;
+                        });
                       },
                     ),
                   ),
@@ -89,22 +72,65 @@ class _FaqPageState extends State<FaqPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16), 
-              filteredfaq.isEmpty 
-                  ? const Center(
-                      child: Text(
-                        'No Faqs found',
-                        style: TextStyle(color: Colors.grey, fontSize: 20), 
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: filteredfaq.length,
-                        itemBuilder: (context, index) {
-                          return FaqCard(faq: filteredfaq[index], isAdmin: true);
-                        },
-                      ),
+              const SizedBox(height: 16),            
+ Expanded(
+                      child:BlocListener<FaqBloc, FaqState>(
+                  listener: (context, state) {
+                    if (state is DeleteFaqState) {
+                      showCustomSnackBar(
+                        context,
+                        state.faqModel.responseMessage,
+                        state.faqModel.isRight,
+                      );
+                       context.read<FaqBloc>().add(LoadAllFaqEvent());
+                    }
+                  },
+                  child: BlocBuilder<FaqBloc, FaqState>(
+                    builder: (context, state) {
+                      if (state is FaqLoadingState) {
+                        return  Center(
+                          child: CircularProgressIndicator(color: commonColor),
+                        );
+                      } else if (state is FaqLoadedState) {
+                        List<FaqEntity> filteredFaqs = state.loadedFaqs
+                            .where((faq) =>
+                                faq.question.toLowerCase().contains(searchQuery.toLowerCase()))
+                            .toList();
+
+                        if (filteredFaqs.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'No Faqs available',
+                              style: TextStyle(color: Colors.grey, fontSize: 20),
+                            ),
+                          );
+                        }
+
+                        return ListView.builder(
+                          itemCount: filteredFaqs.length,
+                          itemBuilder: (context, index) {
+                            return FaqCard(
+                              faq: filteredFaqs[index],
+                              isAdmin: true,
+                            );
+                          },
+                        );
+                      } else if (state is FaqErrorState) {
+                        return Center(
+                          child: Text(
+                            state.message,
+                            style: const TextStyle(color: Colors.red, fontSize: 20),
+                          ),
+                        );
+                      }
+
+                      return const Center(
+                        child: Text('No Faqs available'),
+                      );
+                    },
+                  )
                     ),
+ )
             ],
           ),
         ),
