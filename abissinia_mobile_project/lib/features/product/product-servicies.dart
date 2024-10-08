@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,7 @@ class ProductServices{
 
 Future<ProductModel> addproducts(ProductSend product) async {
   try {
-    var request = http.MultipartRequest('POST', Uri.parse(''));
+    var request = http.MultipartRequest('POST', Uri.parse(Url.productUrl()));
       request.fields['title'] = product.title;
       request.fields['pricing'] = product.price.toString();
       request.fields['description'] = product.description;
@@ -34,7 +35,7 @@ Future<ProductModel> addproducts(ProductSend product) async {
 
   Future<List<ProductEntity>> getAllProducts() async {
     try {
-      final response = await http.get(Uri.parse('/products'));
+      final response = await http.get(Uri.parse(Url.productUrl()));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List;
@@ -55,7 +56,7 @@ Future<ProductModel> addproducts(ProductSend product) async {
 
   Future<ProductModel> updateProduct(ProductSend product) async {
       try {
-    var request = http.MultipartRequest('PUT', Uri.parse(''));
+    var request = http.MultipartRequest('PUT', Uri.parse(Url.productById(product.id.toString())));
       request.fields['id'] = product.id.toString();
       request.fields['title'] = product.title;
       request.fields['pricing'] = product.price.toString();
@@ -82,7 +83,7 @@ Future<ProductModel> addproducts(ProductSend product) async {
 
   Future<ProductModel> deleteProduct(int id) async {
     try {
-      final response = await http.delete(Uri.parse('/products/$id'));
+      final response = await http.delete(Uri.parse(Url.productById(id.toString())));
 
       if (response.statusCode == 200) {
         return const ProductModel(

@@ -4,11 +4,15 @@ import 'package:abissinia_mobile_project/features/blog/blog-servise.dart';
 import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
 import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
+import 'package:abissinia_mobile_project/features/product/bloc/product_bloc.dart';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
+import 'package:abissinia_mobile_project/features/service/bloc/service_bloc.dart';
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
+import 'package:abissinia_mobile_project/features/slider/bloc/slider_bloc.dart';
 import 'package:abissinia_mobile_project/features/slider/slider-page.dart';
 import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-page.dart';
+import 'package:abissinia_mobile_project/features/user/bloc/user_bloc.dart';
 import 'package:abissinia_mobile_project/features/user/login-page.dart';
 import 'package:abissinia_mobile_project/features/user/sign-up-page.dart';
 import 'package:device_preview/device_preview.dart';
@@ -39,6 +43,16 @@ class MyApp extends StatelessWidget {
          BlocProvider(
           create: (context) => TestimonyBloc(), 
         ),
+          BlocProvider(
+          create: (context) => UserBloc(), 
+        ),
+         BlocProvider(
+          create: (context) => ProductBloc(), 
+        ), BlocProvider(
+          create: (context) => SliderBloc(), 
+        ), BlocProvider(
+          create: (context) => ServiceBloc(), 
+        ),
       ],
       child: MaterialApp(
         locale: DevicePreview.locale(context),
@@ -54,7 +68,7 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.black),
           ),
         ),
-        home: const ServicePage(),
+        home: ProductPage(),
       ),
     );
   }

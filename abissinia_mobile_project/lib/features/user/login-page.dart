@@ -1,7 +1,10 @@
 import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/user/bloc/user_bloc.dart';
 import 'package:abissinia_mobile_project/features/user/sign-up-page.dart';
+import 'package:abissinia_mobile_project/features/user/user-entity.dart';
 import 'package:abissinia_mobile_project/features/user/wiget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -29,6 +32,10 @@ class _LoginPageState extends State<LoginPage> {
     if (_emailError != null) {
       return;
     }
+    UserEntity userEntity = UserEntity(userName: username, password: password, fullName: '', role: 'user');
+
+    BlocProvider.of<UserBloc>(context).add(UserLoginEvent(userEntity: userEntity));
+
 
   }
 
@@ -43,7 +50,32 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
+
+
+        body:BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
+            if (state is UserLoginState) {
+              // showCustomSnackBar(context, state.userModel.responseMessage, state.userModel.isRight);
+              if(state.userModel.isRight){
+                String role = state.userModel.responseMessage;
+                if (role == 'admin'){
+                  
+                }
+                else{
+
+                }
+
+              }  
+              else{
+              showCustomSnackBar(context, state.userModel.responseMessage, state.userModel.isRight);
+
+              }            
+               
+            }else if(state is LoginErrorState){
+              showCustomSnackBar(context, state.message, false);}
+          },
+
+      child: SingleChildScrollView(
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 40.0),
@@ -191,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
+      ),)
     );
   }
 }

@@ -13,7 +13,7 @@ class UserEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'userName': userName,
+      'username': userName,
       'password': password,
       'fullName': fullName,
       'role': role,

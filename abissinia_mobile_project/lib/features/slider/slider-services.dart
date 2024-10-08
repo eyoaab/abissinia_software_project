@@ -1,13 +1,15 @@
 import 'dart:convert';
 
+import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
 import 'package:http_parser/http_parser.dart';
 
+class SliderService{
 Future<SliderModel> addsliders(SlidersSend Slidere) async {
   try {
-    var request = http.MultipartRequest('POST', Uri.parse(''));
+    var request = http.MultipartRequest('POST', Uri.parse(Url.sliderUrl()));
       request.fields['title'] = Slidere.title;
       request.fields['description'] = Slidere.description;
       request.files.add(await http.MultipartFile.fromPath(
@@ -31,7 +33,7 @@ Future<SliderModel> addsliders(SlidersSend Slidere) async {
 
 Future<List<SliderEntity>> getAllSliders() async {
     try {
-      final response = await http.get(Uri.parse('/sliders'));
+      final response = await http.get(Uri.parse(Url.sliderUrl()));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List;
@@ -51,7 +53,7 @@ Future<List<SliderEntity>> getAllSliders() async {
 
 Future<SliderModel> updatesliders(SlidersSend Slidere) async {
   try {
-    var request = http.MultipartRequest('PUT', Uri.parse(''));
+    var request = http.MultipartRequest('PUT', Uri.parse(Url.sliderUrlById(Slidere.id.toString())));
       request.fields['id'] = Slidere.id.toString();
       request.fields['title'] = Slidere.title;
       request.fields['description'] = Slidere.description;
@@ -76,7 +78,7 @@ Future<SliderModel> updatesliders(SlidersSend Slidere) async {
 
 Future<SliderModel> deleteSlider(int id) async {
     try {
-      final response = await http.delete(Uri.parse('/Sliders/$id'));
+      final response = await http.delete(Uri.parse(Url.sliderUrlById(id.toString())));
 
       if (response.statusCode == 200) {
         return const SliderModel(
@@ -90,3 +92,4 @@ Future<SliderModel> deleteSlider(int id) async {
           responseMessage: 'Error deleting Slider: $e', isRight: false);
     }
   }
+}

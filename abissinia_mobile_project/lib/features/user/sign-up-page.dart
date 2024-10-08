@@ -1,7 +1,10 @@
-import 'package:abissinia_mobile_project/core/store.dart'; 
+import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/user/bloc/user_bloc.dart'; 
 import 'package:abissinia_mobile_project/features/user/login-page.dart';
+import 'package:abissinia_mobile_project/features/user/user-entity.dart';
 import 'package:abissinia_mobile_project/features/user/wiget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -29,7 +32,28 @@ class _SignupPageState extends State<SignupPage> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-
+ void _showLoadingDialog(String message) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (context) {
+      return AlertDialog(
+        content: Container(
+          width: 300, 
+          padding: const EdgeInsets.all(16.0), 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+               CircularProgressIndicator(color: commonColor,),
+              const SizedBox(width: 16),
+              Expanded(child: Text(message, textAlign: TextAlign.center)), 
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
   void clearFields() {
     _usernameController.clear();
     _confirmPasswordController.clear();
@@ -53,9 +77,9 @@ class _SignupPageState extends State<SignupPage> {
       });
       return;
     }
-    setState(() {
-      _passwordError = '';
-    });
+  
+    UserEntity userEntity = UserEntity(userName: username, password: password, fullName: name, role: 'user');
+    BlocProvider.of<UserBloc>(context).add(UserSignUpEvent(userEntity: userEntity));
   }
 
   void _togglePasswordVisibility() {
@@ -81,7 +105,20 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
+        body:BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
+            if (state is UserSignUpState) {
+              showCustomSnackBar(context, state.userModel.responseMessage, state.userModel.isRight);
+              if(state.userModel.isRight){
+              goToLogInPage();
+
+              }              
+               
+            }else if(state is SignUpErrorState){
+              showCustomSnackBar(context, state.message, false);
+
+            }},
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
           child: Center(
             child: Column(
@@ -247,6 +284,7 @@ class _SignupPageState extends State<SignupPage> {
           ),
         ),
       ),
+      )
     );
   }
 }

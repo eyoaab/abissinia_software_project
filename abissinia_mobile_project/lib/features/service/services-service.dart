@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:abissinia_mobile_project/features/service/service-entity.dart';
@@ -10,7 +11,7 @@ class ServicesServise{
 
 Future<ServiceModel> addServices(ServiceSend service) async {
   try {
-    var request = http.MultipartRequest('POST', Uri.parse(''));
+    var request = http.MultipartRequest('POST', Uri.parse(Url.servicesUrl()));
       request.fields['title'] = service.title;
       request.fields['pricing'] = service.price.toString();
       request.fields['description'] = service.description;
@@ -37,7 +38,7 @@ Future<ServiceModel> addServices(ServiceSend service) async {
 
 Future<List<ServiceEntity>> getAllServices() async {
     try {
-      final response = await http.get(Uri.parse('/service'));
+      final response = await http.get(Uri.parse(Url.servicesUrl()));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List;
@@ -57,7 +58,7 @@ Future<List<ServiceEntity>> getAllServices() async {
 
 Future<ServiceModel> updateServices(ServiceSend service) async {
   try {
-    var request = http.MultipartRequest('PUT', Uri.parse(''));
+    var request = http.MultipartRequest('PUT', Uri.parse(Url.servicesUrlById(service.id.toString())));
       request.fields['id'] = service.id.toString();
       request.fields['title'] = service.title;
       request.fields['pricing'] = service.price.toString();
@@ -85,7 +86,7 @@ Future<ServiceModel> updateServices(ServiceSend service) async {
 
 Future<ServiceModel> deleteServic(int id) async {
     try {
-      final response = await http.delete(Uri.parse('/Servics/$id'));
+      final response = await http.delete(Uri.parse(Url.servicesUrlById(id.toString())));
 
       if (response.statusCode == 200) {
         return const ServiceModel(

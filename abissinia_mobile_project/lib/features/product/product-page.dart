@@ -111,7 +111,7 @@ class _ProductPageState extends State<ProductPage> {
                         itemBuilder: (context, index) {
                           return ProductCard(
                               productEntity: filteredProducts[index],
-                              isAdmin: true);
+                              isAdmin: false);
                         },
                       ),
               ],
