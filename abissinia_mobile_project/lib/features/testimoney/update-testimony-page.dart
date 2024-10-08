@@ -1,8 +1,10 @@
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
+import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateTestimonyPage extends StatefulWidget {
   final TestimonyEntity testimonyEntity;
@@ -51,7 +53,30 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
       company: _companyController.text.trim(),
       description: _descriptionController.text.trim(),
     );
-    _clearAllFields();
+       BlocProvider.of<TestimonyBloc>(context).add(UpdateTestimonyEvent(testimonyEntity: updatedTestimonyEntity));
+
+  }
+    void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, 
+      builder: (context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 16),
+              Text('Updating Testimony...'),
+            ],
+          ),
+        );
+      },
+    );
+  }
+    void _dismissLoadingDialog() {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -69,7 +94,24 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
           ),
           title: const Text('Update Testimony', style: TextStyle(color: Colors.black)),
         ),
-        body: SingleChildScrollView(
+         body: BlocListener<TestimonyBloc, TestimonyState>(
+          listener: (context, state) {
+            if (state is TestimonyUpdateLoadingState) {
+              _showLoadingDialog();
+            } else if (state is UpdateTestimonyState) {
+              _dismissLoadingDialog();
+              showCustomSnackBar(context, state.testimonyModel.responseMessage, state.testimonyModel.isRight);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ServicePage()),
+              );
+            } else if (state is TestimonyErrorState) {
+              _dismissLoadingDialog();
+              showCustomSnackBar(context, state.message, false);
+            }
+          },
+        
+        child:SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,6 +173,7 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
           ),
         ),
       ),
+    ),
     );
   }
 }

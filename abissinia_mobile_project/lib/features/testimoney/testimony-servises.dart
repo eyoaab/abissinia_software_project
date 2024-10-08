@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +8,7 @@ class TestimonyService {
   Future<TestimonyModel> createTestimony(TestimonyEntity testimony) async {
     try {
       final response = await http.post(
-        Uri.parse('/testimonies'),
+        Uri.parse(Url.testimonyUrl()),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           "description": testimony.description,
@@ -32,7 +33,7 @@ class TestimonyService {
   Future<List<TestimonyEntity>> getAllTestimonies() async {
     try {
       final response = await http.get(
-        Uri.parse('/testimonies'),
+        Uri.parse(Url.testimonyUrl()),
       );
 
       if (response.statusCode == 200) {
@@ -52,10 +53,10 @@ class TestimonyService {
     }
   }
 
-  Future<TestimonyModel> updateTestimony(int id, TestimonyEntity testimony) async {
+  Future<TestimonyModel> updateTestimony( TestimonyEntity testimony) async {
     try {
       final response = await http.put(
-        Uri.parse('/testimonies/$id'),
+        Uri.parse(Url.testimonyById(testimony.id.toString())),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(testimony.toJson()),
       );
@@ -76,10 +77,10 @@ class TestimonyService {
   Future<TestimonyModel> deleteTestimony(int id) async {
     try {
       final response = await http.delete(
-        Uri.parse('/testimonies/$id'),
+        Uri.parse(Url.testimonyById(id.toString())),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 204  ) {
         return const TestimonyModel(
             responseMessage: 'Testimony deleted successfully', isRight: true);
       } else {

@@ -7,6 +7,7 @@ import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
 import 'package:abissinia_mobile_project/features/slider/slider-page.dart';
+import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-page.dart';
 import 'package:abissinia_mobile_project/features/user/login-page.dart';
 import 'package:abissinia_mobile_project/features/user/sign-up-page.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
          BlocProvider(
           create: (context) => FaqBloc(), 
         ),
+         BlocProvider(
+          create: (context) => TestimonyBloc(), 
+        ),
       ],
       child: MaterialApp(
         locale: DevicePreview.locale(context),
@@ -50,7 +54,7 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.black),
           ),
         ),
-        home: const FaqPage(),
+        home: const ServicePage(),
       ),
     );
   }

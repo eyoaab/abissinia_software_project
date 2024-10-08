@@ -1,7 +1,11 @@
+
 import 'dart:async';
+import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:abissinia_mobile_project/features/testimoney/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TestimonyPage extends StatefulWidget {
   const TestimonyPage({Key? key}) : super(key: key);
@@ -11,41 +15,24 @@ class TestimonyPage extends StatefulWidget {
 }
 
 class _TestimonyPageState extends State<TestimonyPage> {
-  final List<TestimonyEntity> dummyTestimonials = [
-    TestimonyEntity(
-      id: 1,
-      description:
-          'Testimonial 1: The team at ACM Technology provided exceptional web development services. They paid great attention to detail and delivered on time. Their expertise in creating responsive and user-friendly websites helped my company grow significantly.',
-      service: 'Web Development',
-      company: 'ACM Technology',
-    ),
-    TestimonyEntity(
-      id: 2,
-      description:
-          'Testimonial 2: XYZ Solutions went above and beyond to create a mobile app that exceeded my expectations. Their design team was very creative and worked closely with us to ensure the app met all our needs. Highly recommend!',
-      service: 'App Design',
-      company: 'XYZ Solutions',
-    ),
-    TestimonyEntity(
-      id: 3,
-      description:
-          'Testimonial 3: Tech Corp provided excellent customer support throughout our project. They were always available to assist us with any questions or concerns and resolved issues promptly. Their commitment to customer satisfaction was outstanding.',
-      service: 'Customer Support',
-      company: 'Tech Corp',
-    ),
-  ];
-
   late PageController _pageController;
-  late Timer _timer;
+  Timer? _timer;
   int _currentPage = 0;
+  int _totalPages = 0;
 
   @override
   void initState() {
     super.initState();
+    context.read<TestimonyBloc>().add(LoadAllTestimonyEvent());
     _pageController = PageController(initialPage: 0);
+  }
 
-    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (_currentPage < dummyTestimonials.length - 1) {
+  void _startAutoScroll(int totalPages) {
+    _timer?.cancel();
+    _totalPages = totalPages;
+
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (_currentPage < _totalPages - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
@@ -60,48 +47,88 @@ class _TestimonyPageState extends State<TestimonyPage> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 380,
-      child: Column(
-        children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: dummyTestimonials.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'No Testimonials Available',
-                          style: TextStyle(color: Colors.grey, fontSize: 20),
-                        ),
-                      )
-                    : PageView.builder(
-                        controller: _pageController,
-                        itemCount: dummyTestimonials.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: TestimonialCard(
-                              testimonyEntity: dummyTestimonials[index],
-                              isAdmin: true,
+    return BlocListener<TestimonyBloc, TestimonyState>(
+      listener: (context, state) {
+        if (state is DeleteTestimonyState) {
+          showCustomSnackBar(
+            context,
+            state.testimonyModel.responseMessage,
+            state.testimonyModel.isRight,
+          );
+          context.read<TestimonyBloc>().add(LoadAllTestimonyEvent());
+        }
+      },
+      child: Container(
+        height: 380,
+        child: Column(
+          children: [
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: BlocBuilder<TestimonyBloc, TestimonyState>(
+                    builder: (context, state) {
+                      if (state is TestimonyLoadingState) {
+                        return Center(
+                          child: CircularProgressIndicator(color: commonColor),
+                        );
+                      } else if (state is TestimonyLoadedState) {
+                        List<TestimonyEntity> dummyTestimonials = state.loadedTestimonys.toList();
+
+                        if (dummyTestimonials.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'No Testimonys available',
+                              style: TextStyle(color: Colors.grey, fontSize: 20),
                             ),
                           );
-                        },
-                      ),
+                        }
+
+                        // Start the auto-scroll when new data is loaded
+                        _startAutoScroll(dummyTestimonials.length);
+
+                        return PageView.builder(
+                          controller: _pageController,
+                          itemCount: dummyTestimonials.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: TestimonialCard(
+                                testimonyEntity: dummyTestimonials[index],
+                                isAdmin: true,
+                              ),
+                            );
+                          },
+                        );
+                      } else if (state is TestimonyErrorState) {
+                        return Center(
+                          child: Text(
+                            state.message,
+                            style: const TextStyle(color: Colors.red, fontSize: 20),
+                          ),
+                        );
+                      }
+
+                      return const Center(
+                        child: Text('No Testimonys available'),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-        ],
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }

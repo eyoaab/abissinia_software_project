@@ -1,6 +1,8 @@
+import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/update-testimony-page.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TestimonialCard extends StatelessWidget {
   final TestimonyEntity testimonyEntity;
@@ -86,6 +88,8 @@ class TestimonialCard extends StatelessWidget {
                     icon: const Icon(Icons.delete,size:30),
                     color: Colors.red,
                     onPressed: () {
+            BlocProvider.of<TestimonyBloc>(context).add(DeleteTestimonyEvent(id: testimonyEntity.id));
+
                     
                     },
                   ),

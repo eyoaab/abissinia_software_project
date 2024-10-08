@@ -1,8 +1,10 @@
+import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddTestimonyPage extends StatefulWidget {
   @override
@@ -22,6 +24,28 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
       _campanyController.clear(); 
     });
   }
+   void _showLoadingDialog(String message) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (context) {
+      return AlertDialog(
+        content: Container(
+          width: 300, 
+          padding: const EdgeInsets.all(16.0), 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+               CircularProgressIndicator(color: commonColor,),
+              const SizedBox(width: 16),
+              Expanded(child: Text(message, textAlign: TextAlign.center)), 
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
   void _saveTestimony() {
     if (_serviceController.text.isEmpty ||
@@ -29,7 +53,7 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
         _campanyController.text.isEmpty) {
       
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
+        const SnackBar(content: Text('Please fill all fields')),
       );
       return;
     }
@@ -42,7 +66,8 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
      
     );
 
-    _clearAllFields();
+      BlocProvider.of<TestimonyBloc>(context).add(AddTestimonyEvent(testimonyEntity: testimonyEntity));
+
   }
 
  
@@ -62,7 +87,25 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
           ),
           title: const Text('Add Testimony', style: TextStyle(color: Colors.black)),
         ),
-        body: SingleChildScrollView(
+        body: BlocListener<TestimonyBloc, TestimonyState>(
+          listener: (context, state) {
+            if (state is TestimonyAddLoadingState) {
+              _showLoadingDialog('Creating a Testimony');
+               
+            }
+
+            if (state is AddTestimonyState) {
+              Navigator.pop(context); 
+              showCustomSnackBar(context, state.testimonyModel.responseMessage, state.testimonyModel.isRight);
+              _clearAllFields();
+            }
+
+            if (state is TestimonyErrorState) {
+              Navigator.pop(context);
+              showCustomSnackBar(context, state.message, false);
+            }
+          },
+        child:SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +171,7 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
             ],
           ),
         ),
-      ),
+      ),),
     );
   }
 }
