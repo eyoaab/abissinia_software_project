@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:http/http.dart' as http;
@@ -36,12 +37,21 @@ Future<List<SliderEntity>> getAllSliders() async {
       final response = await http.get(Uri.parse(Url.sliderUrl()));
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List;
+        final jsonData = json.decode(response.body)['sliders']as List;
+        log(jsonData.toString());
 
         List<SliderEntity> sliders = [];
         for (var item in jsonData) {
           sliders.add(SliderEntity.fromJson(item));
+          
         }
+         for (var item in sliders) {
+          log(item.description);
+          log(item.toString())
+;          
+        }
+        
+        
         return sliders;
       } else {
         return [];

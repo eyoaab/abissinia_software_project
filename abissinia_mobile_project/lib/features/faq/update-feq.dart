@@ -1,6 +1,7 @@
 import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-page.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -83,7 +84,7 @@ class _UpdateFaqPageState extends State<UpdateFaqPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const FaqPage()),
+              MaterialPageRoute(builder: (context) =>  MainPage(selectedIndex:2,isAdmin: true,)),
             ),
           ),
           title: const Text('Update FAQ', style: TextStyle(color: Colors.black)),
@@ -97,7 +98,7 @@ class _UpdateFaqPageState extends State<UpdateFaqPage> {
               showCustomSnackBar(context, state.faqModel.responseMessage, state.faqModel.isRight);
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const FaqPage()),
+                MaterialPageRoute(builder: (context) => MainPage(isAdmin: true,selectedIndex: 2,)),
               );
             } else if (state is FaqErrorState) {
               _dismissLoadingDialog();

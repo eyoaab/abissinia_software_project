@@ -1,6 +1,7 @@
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/blog/bloc/blog_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -76,7 +77,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddPage()),
+              MaterialPageRoute(builder: (context) =>  MainPage(isAdmin: true,selectedIndex: 4,)),
             ),
           ),
           title: const Text('Add Blog', style: TextStyle(color: Colors.black)),

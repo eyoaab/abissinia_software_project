@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'package:abissinia_mobile_project/features/product/bloc/product_bloc.dart';
+import 'package:abissinia_mobile_project/features/product/product-detail-page.dart';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
@@ -44,9 +48,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+   
+      showCustomSnackBar(context, 'Error picking image: $e', false);
+
     }
   }
 
@@ -68,9 +72,9 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
         (_image == null && widget.productEntity.image.isEmpty) ||
         _features.isEmpty) {
       
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
-      );
+      showCustomSnackBar(context, 'Please fill all fields ', false);
+
+      
       return;
     }
 
@@ -82,8 +86,8 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
       price: double.parse(_priceController.text.trim()),
       features: _features,
     );
+    BlocProvider.of<ProductBloc>(context).add(UpdateProductEvent(productEntity: updatedProduct));
 
-    _clearAllFields();
   }
 
   void _addFeature() {
@@ -105,7 +109,7 @@ class _UpdateProductPageState extends State<UpdateProductPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const ProductPage()),
+              MaterialPageRoute(builder: (context) => ProductDetailPage(productEntity: widget.productEntity, isAdmin: true)),
             ),
           ),
           title: const Text('Update Product', style: TextStyle(color: Colors.black)),

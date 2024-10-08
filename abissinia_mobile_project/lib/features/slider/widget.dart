@@ -1,7 +1,9 @@
 import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/slider/bloc/slider_bloc.dart';
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
 import 'package:abissinia_mobile_project/features/slider/update-slider-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SliderCard extends StatelessWidget {
   final SliderEntity sliderEntity;
@@ -96,6 +98,8 @@ class SliderCard extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red,size :40),
                       onPressed: () {
+                  BlocProvider.of<SliderBloc>(context).add(DeleteSliderEvent(id: sliderEntity.id));
+
                       },
                     ),
                 ],

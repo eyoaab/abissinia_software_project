@@ -43,7 +43,7 @@ class SlidersSend{
       id: json['id'] as int,
       title: json['title'] as String,
       description: json['description'] as String,
-      image: json['image'] as String,
+      image: json['image'] != null ? json['image'] as String : 'default_image_url',
     );
   }
 

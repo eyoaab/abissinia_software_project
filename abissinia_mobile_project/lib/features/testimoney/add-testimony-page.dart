@@ -1,5 +1,6 @@
 import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -52,9 +53,9 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
         _descriptionController.text.isEmpty ||
         _campanyController.text.isEmpty) {
       
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+     
+      showCustomSnackBar(context, 'Please fill all fields', false);
+
       return;
     }
 
@@ -82,7 +83,7 @@ class _AddTestimonyPageState extends State<AddTestimonyPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddPage()),
+              MaterialPageRoute(builder: (context) => MainPage(selectedIndex: 4,isAdmin: true,)),
             ),
           ),
           title: const Text('Add Testimony', style: TextStyle(color: Colors.black)),

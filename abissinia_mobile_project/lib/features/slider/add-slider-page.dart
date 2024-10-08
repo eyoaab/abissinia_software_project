@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:abissinia_mobile_project/features/slider/bloc/slider_bloc.dart';
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -29,9 +32,7 @@ class _AddSliderPageState extends State<AddSliderPage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      showCustomSnackBar(context, 'Error picking image: ', false);
     }
   }
 
@@ -49,10 +50,9 @@ class _AddSliderPageState extends State<AddSliderPage> {
         _descriptionController.text.isEmpty ||
         _image == null 
         ) {
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
-      );
+  
+        showCustomSnackBar(context,'lease fill all fields',false);
+
       return;
     }
 
@@ -65,11 +65,9 @@ class _AddSliderPageState extends State<AddSliderPage> {
 
     );
 
-    _clearAllFields();
+    BlocProvider.of<SliderBloc>(context).add(AddSliderEvent(sliderEntity: slidersSend));
+    
   }
-
- 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -80,7 +78,7 @@ class _AddSliderPageState extends State<AddSliderPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddPage()),
+              MaterialPageRoute(builder: (context) => MainPage(selectedIndex: 4,isAdmin: true,)),
             ),
           ),
           title: const Text('Add Slider', style: TextStyle(color: Colors.black)),

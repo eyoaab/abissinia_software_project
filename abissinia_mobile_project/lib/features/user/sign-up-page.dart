@@ -139,6 +139,8 @@ class _SignupPageState extends State<SignupPage> {
                   borderRadius: BorderRadius.circular(20.0),
                   child: Image.asset(
                     'logo.jpeg',
+                    // 'assets/logo.jpeg',
+
                     height: 230,
                     width: 270, 
                     fit: BoxFit.cover, 

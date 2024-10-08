@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
 import 'package:abissinia_mobile_project/features/service/service-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
@@ -32,9 +33,10 @@ class _AddServicePageState extends State<AddServicePage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      
+     
+      showCustomSnackBar(context, 'Error picking image: $e', false);
+
     }
   }
 
@@ -58,9 +60,8 @@ class _AddServicePageState extends State<AddServicePage> {
         _tiemController.text.isEmpty||
         _catagoryController.text.isEmpty) {
       
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
-      );
+      showCustomSnackBar(context, 'Please fill all fields', false);
+    
       return;
     }
 
@@ -90,7 +91,7 @@ class _AddServicePageState extends State<AddServicePage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddPage()),
+              MaterialPageRoute(builder: (context) => MainPage(isAdmin: true,selectedIndex: 4)),
             ),
           ),
           title: const Text('Add Service', style: TextStyle(color: Colors.black)),

@@ -3,6 +3,7 @@ import 'package:abissinia_mobile_project/features/user/bloc/user_bloc.dart';
 import 'package:abissinia_mobile_project/features/user/sign-up-page.dart';
 import 'package:abissinia_mobile_project/features/user/user-entity.dart';
 import 'package:abissinia_mobile_project/features/user/wiget.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,9 +60,17 @@ class _LoginPageState extends State<LoginPage> {
               if(state.userModel.isRight){
                 String role = state.userModel.responseMessage;
                 if (role == 'admin'){
+                   Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage(isAdmin: true,selectedIndex: 0,)),
+                  );
                   
                 }
                 else{
+                   Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage(isAdmin: false,selectedIndex: 0)),
+                  );
 
                 }
 
@@ -95,6 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(20.0),
                   child: Image.asset(
                     'logo.jpeg',
+                    // 'assets/logo.jpeg',
+
                     height: 230,
                     width: 270, 
                     fit: BoxFit.cover, 

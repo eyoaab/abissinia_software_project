@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
+import 'package:abissinia_mobile_project/features/service/bloc/service_bloc.dart';
+import 'package:abissinia_mobile_project/features/service/service-detail.dart';
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -10,6 +13,7 @@ import 'package:abissinia_mobile_project/features/product/widget.dart';
 
 class UpdateServicePage extends StatefulWidget {
   final ServiceEntity service; 
+
 
   const UpdateServicePage({Key? key, required this.service}) : super(key: key);
 
@@ -48,9 +52,7 @@ class _UpdateServicePageState extends State<UpdateServicePage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      showCustomSnackBar(context, 'Error picking image: $e', false);
     }
   }
 
@@ -60,29 +62,24 @@ class _UpdateServicePageState extends State<UpdateServicePage> {
         _descriptionController.text.isEmpty ||
         _categoryController.text.isEmpty ||
         _timeController.text.isEmpty) {
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+  
+      showCustomSnackBar(context, 'Please fill all fields', false);
+
       return;
     }
 
-    // Create the updated ServiceSend object
     final ServiceSend updatedService = ServiceSend(
       id: widget.service.id,
       title: _nameController.text.trim(),
       description: _descriptionController.text.trim(),
-      image: _image ?? File(''), // Use existing image if no new image selected
+      image: _image ?? File(''), 
       price: double.parse(_priceController.text.trim()),
       category: _categoryController.text.trim(),
       time: _timeController.text.trim(),
     );
 
-    // Perform the update operation (you can implement the logic here)
-    // ...
+  BlocProvider.of<ServiceBloc>(context).add(UpdateServiceEvent(serviceSend: updatedService));
 
-    // Clear all fields after update
-    _clearAllFields();
   }
 
   void _clearAllFields() {
@@ -106,7 +103,7 @@ class _UpdateServicePageState extends State<UpdateServicePage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const ServicePage()),
+              MaterialPageRoute(builder: (context) =>  ServiceDetailPage(serviceEntity:widget.service, isAdmin: true)),
             ),
           ),
           title: const Text('Update Service', style: TextStyle(color: Colors.black)),

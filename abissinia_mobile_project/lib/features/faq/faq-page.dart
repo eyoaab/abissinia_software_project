@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FaqPage extends StatefulWidget {
-  const FaqPage({Key? key}) : super(key: key);
+  final bool isAdmin;
+  const FaqPage({Key? key,required this.isAdmin}) : super(key: key);
 
   @override
   _FaqPageState createState() => _FaqPageState();
@@ -28,18 +29,18 @@ class _FaqPageState extends State<FaqPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.12), 
+       appBar: PreferredSize(
+          preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.06), 
           child: Container(
             color: Colors.green,
             child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Icon(Icons.question_mark,size:40,color: Color.fromARGB(255, 225, 220, 220),),
-                SizedBox(height: 8), 
+             
                 Text(
-                  'How Can we help you?',
+                  'Faq Page',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -111,7 +112,7 @@ class _FaqPageState extends State<FaqPage> {
                           itemBuilder: (context, index) {
                             return FaqCard(
                               faq: filteredFaqs[index],
-                              isAdmin: true,
+                              isAdmin: widget.isAdmin,
                             );
                           },
                         );

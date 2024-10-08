@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
@@ -38,7 +39,8 @@ Future<ProductModel> addproducts(ProductSend product) async {
       final response = await http.get(Uri.parse(Url.productUrl()));
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List;
+     
+        final jsonData = json.decode(response.body)['products'] as List;
 
         List<ProductEntity> products = [];
         for (var item in jsonData) {

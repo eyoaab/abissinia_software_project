@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:abissinia_mobile_project/core/constants/Urls.dart';
 import 'package:http/http.dart' as http;
@@ -41,7 +42,9 @@ Future<List<ServiceEntity>> getAllServices() async {
       final response = await http.get(Uri.parse(Url.servicesUrl()));
 
       if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body) as List;
+          log('stateus');
+        log(response.body.toString());
+        final jsonData = json.decode(response.body)['services'] as List;
 
         List<ServiceEntity> services = [];
         for (var item in jsonData) {

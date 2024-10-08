@@ -1,7 +1,9 @@
 import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/service/bloc/service_bloc.dart';
 import 'package:abissinia_mobile_project/features/service/service-entity.dart';
 import 'package:abissinia_mobile_project/features/service/update-services-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServiceDetailPage extends StatefulWidget {
   final ServiceEntity serviceEntity;
@@ -161,6 +163,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                     ),
                     OutlinedButton(
                       onPressed: () {
+                        BlocProvider.of<ServiceBloc>(context).add(DeleteServiceEvent(id:widget.serviceEntity.id));
+
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.red,

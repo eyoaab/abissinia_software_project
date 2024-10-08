@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/widgets.dart';
 
 class BlogPage extends StatefulWidget {
-  const BlogPage({Key? key}) : super(key: key);
+  final bool isAdmin;
+  const BlogPage({Key? key,required this.isAdmin}) : super(key: key);
 
   @override
   _BlogPageState createState() => _BlogPageState();
@@ -25,9 +26,29 @@ class _BlogPageState extends State<BlogPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 40.0,
+          appBar: PreferredSize(
+          preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.06), 
+          child: Container(
+            color: Colors.green,
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+             
+                Text(
+                  'Blog Page',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
+        // appBar: AppBar(
+        //   toolbarHeight: 40.0,
+        // ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Column(
@@ -90,7 +111,7 @@ class _BlogPageState extends State<BlogPage> {
                           itemBuilder: (context, index) {
                             return BlogCard(
                               blog: filteredBlogs[index],
-                              isAdmin: true,
+                              isAdmin: widget.isAdmin,
                             );
                           },
                         );

@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:abissinia_mobile_project/features/product/product-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
+import 'package:abissinia_mobile_project/features/slider/bloc/slider_bloc.dart';
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -40,9 +43,9 @@ class _UpdateSliderPageState extends State<UpdateSliderPage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+     
+      showCustomSnackBar(context, 'Error picking image: $e', false);
+
     }
   }
 
@@ -58,9 +61,8 @@ class _UpdateSliderPageState extends State<UpdateSliderPage> {
     if (_titleController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         (_image == null && widget.slider.image.isEmpty)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and add at least one feature')),
-      );
+    
+      showCustomSnackBar(context, 'Please fill all fields', false);
       return;
     }
 
@@ -71,8 +73,9 @@ class _UpdateSliderPageState extends State<UpdateSliderPage> {
       image: _image ?? File(widget.slider.image), 
     );
 
-
-    _clearAllFields();
+    BlocProvider.of<SliderBloc>(context).add(UpdateSliderEvent(sliderEntity: updatedSlider));
+    
+    
   }
 
   @override
@@ -85,7 +88,7 @@ class _UpdateSliderPageState extends State<UpdateSliderPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const ProductPage()),
+              MaterialPageRoute(builder: (context) =>  MainPage(isAdmin: true,selectedIndex: 0,)),
             ),
           ),
           title: const Text('Update Slider', style: TextStyle(color: Colors.black)),

@@ -99,16 +99,16 @@ class ProductCard extends StatelessWidget {
 
 InputDecoration decorateInput(String hintText) {
   return InputDecoration(
-    hintText: hintText, // Dynamic hint text
+    hintText: hintText, 
     filled: true,
-    fillColor: Colors.white, // White background
+    fillColor: Colors.white, 
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      borderSide: BorderSide(color: Colors.grey), // Grey border
+      borderSide: BorderSide(color: Colors.grey), 
     ),
     enabledBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      borderSide: BorderSide(color: Colors.grey), // Grey border for enabled state
+      borderSide: BorderSide(color: Colors.grey),
     ),
     focusedBorder: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),

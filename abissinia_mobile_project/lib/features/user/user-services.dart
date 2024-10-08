@@ -49,6 +49,7 @@ Future<UserModel> loginUser(UserEntity user) async {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       String token =  data['token'];
+      // log(token);
       String role = decodeJWT(token);
       UserModel userModel = UserModel(responseMessage: role, isRight: true);
       return userModel;
@@ -70,11 +71,15 @@ String decodeJWT(String token) {
   if (parts.length != 3) {
     throw Exception('Invalid token');
   }
+  log('parts');
+  log(parts.toString());
   final payload = _decodeBase64(parts[1]);
+  log('paylod');
+  log(payload.toString());
   final String payloadMap = json.decode(payload)['role'].toString();  
-  if (payloadMap is! Map<String, dynamic>) {
-    throw Exception('Invalid payload');
-  }
+  // if (payloadMap is! Map<String, dynamic>) {
+  //   throw Exception('Invalid payload');
+  // }
   return payloadMap;
 }
 

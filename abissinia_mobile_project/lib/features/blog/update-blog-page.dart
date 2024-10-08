@@ -2,6 +2,7 @@ import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/blog/bloc/blog_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
 import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
@@ -41,9 +42,8 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
     if (_nameController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         _catagoryController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+     
+      showCustomSnackBar(context, 'Please fill all fields', false);
       return;
     }
 
@@ -92,7 +92,7 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const BlogPage()),
+              MaterialPageRoute(builder: (context) =>  MainPage(isAdmin: true,selectedIndex: 1,)),
             ),
           ),
           title: const Text('Update Blog', style: TextStyle(color: Colors.black)),
@@ -106,7 +106,7 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
               showCustomSnackBar(context, state.blogModel.responseMessage, state.blogModel.isRight);
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const BlogPage()),
+                MaterialPageRoute(builder: (context) =>  MainPage(isAdmin: true,selectedIndex: 1,)),
               );
             } else if (state is BlogErrorState) {
               _dismissLoadingDialog();

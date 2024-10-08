@@ -43,7 +43,7 @@ class _BlogCardState extends State<BlogCard> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    widget.blog.date,
+                    widget.blog.date.substring(0,10),
                     style: const TextStyle(fontSize: 14, color: Colors.green),
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:abissinia_mobile_project/features/faq/bloc/faq_bloc.dart';
 import 'package:abissinia_mobile_project/features/faq/faq-entity.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
@@ -46,13 +47,13 @@ class _AddFaqPageState extends State<AddFaqPage> {
     },
   );
 }
-  void _saveTestimony() {
+  void _saveFaq() {
     if (_questionController.text.isEmpty ||
         _answerController.text.isEmpty) {
       
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+    
+      showCustomSnackBar(context, 'Please fill all fields', false);
+
       return;
     }
 
@@ -79,7 +80,7 @@ class _AddFaqPageState extends State<AddFaqPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const AddPage()),
+              MaterialPageRoute(builder: (context) => MainPage(isAdmin: true,selectedIndex: 4,)),
             ),
           ),
           title: const Text('Add FAQ', style: TextStyle(color: Colors.black)),
@@ -131,7 +132,7 @@ class _AddFaqPageState extends State<AddFaqPage> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: OutlinedButton(
-                        onPressed: _saveTestimony,
+                        onPressed: _saveFaq,
                         style: OutlinedButton.styleFrom(
                           backgroundColor: commonColor,
                           side: BorderSide(color: commonColor, width: 2),

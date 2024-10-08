@@ -1,6 +1,7 @@
 import 'package:abissinia_mobile_project/features/service/srvice-page.dart';
 import 'package:abissinia_mobile_project/features/testimoney/bloc/testimony_bloc.dart';
 import 'package:abissinia_mobile_project/features/testimoney/testimony-entity.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
@@ -23,7 +24,7 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with the existing testimony data
+  
     _serviceController = TextEditingController(text: widget.testimonyEntity.service);
     _companyController = TextEditingController(text: widget.testimonyEntity.company);
     _descriptionController = TextEditingController(text: widget.testimonyEntity.description);
@@ -41,9 +42,8 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
     if (_serviceController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
         _companyController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+    
+      showCustomSnackBar(context, 'Please fill all fields', false);
       return;
     }
 
@@ -89,7 +89,7 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () =>   Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) =>  const ServicePage()),
+              MaterialPageRoute(builder: (context) =>  MainPage(isAdmin:true,selectedIndex: 3,)),
             ),
           ),
           title: const Text('Update Testimony', style: TextStyle(color: Colors.black)),
@@ -103,7 +103,7 @@ class _UpdateTestimonyPageState extends State<UpdateTestimonyPage> {
               showCustomSnackBar(context, state.testimonyModel.responseMessage, state.testimonyModel.isRight);
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const ServicePage()),
+                MaterialPageRoute(builder: (context) =>  MainPage(isAdmin: true,selectedIndex: 3,)),
               );
             } else if (state is TestimonyErrorState) {
               _dismissLoadingDialog();

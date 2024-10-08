@@ -1,7 +1,9 @@
 import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/product/bloc/product_bloc.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
 import 'package:abissinia_mobile_project/features/product/update-product-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final ProductEntity productEntity;
@@ -161,7 +163,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       ),
                       OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                         BlocProvider.of<ProductBloc>(context).add(DeleteProductEvent(id:widget.productEntity.id));
+
+                        },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.red,
                           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 30.0),

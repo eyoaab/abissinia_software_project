@@ -8,7 +8,8 @@ import 'package:abissinia_mobile_project/features/testimoney/widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TestimonyPage extends StatefulWidget {
-  const TestimonyPage({Key? key}) : super(key: key);
+  final bool isAdmin;
+  const TestimonyPage({Key? key,required this.isAdmin}) : super(key: key);
 
   @override
   _TestimonyPageState createState() => _TestimonyPageState();
@@ -92,7 +93,6 @@ class _TestimonyPageState extends State<TestimonyPage> {
                           );
                         }
 
-                        // Start the auto-scroll when new data is loaded
                         _startAutoScroll(dummyTestimonials.length);
 
                         return PageView.builder(
@@ -104,7 +104,7 @@ class _TestimonyPageState extends State<TestimonyPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: TestimonialCard(
                                 testimonyEntity: dummyTestimonials[index],
-                                isAdmin: true,
+                                isAdmin: widget.isAdmin,
                               ),
                             );
                           },
