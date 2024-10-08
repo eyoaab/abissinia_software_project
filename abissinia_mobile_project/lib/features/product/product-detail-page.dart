@@ -143,10 +143,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       OutlinedButton(
                         onPressed: () {
-                           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) =>  UpdateProductPage(productEntity: widget.productEntity,)),
-            );
+                        Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  UpdateProductPage(productEntity: widget.productEntity,)),
+                      );
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor:commonColor,

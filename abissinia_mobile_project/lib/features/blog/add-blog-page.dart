@@ -1,85 +1,69 @@
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/blog/bloc/blog_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
-import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:abissinia_mobile_project/features/add-page/add-page.dart';
 import 'package:abissinia_mobile_project/features/product/widget.dart';
 
-class UpdateBlogPage extends StatefulWidget {
-  final BlogEntity blogEntity;
-
-  const UpdateBlogPage({Key? key, required this.blogEntity}) : super(key: key);
-
+class AddBlogPage extends StatefulWidget {
   @override
-  _UpdateBlogPageState createState() => _UpdateBlogPageState();
+  _AddBlogPageState createState() => _AddBlogPageState();
 }
 
-class _UpdateBlogPageState extends State<UpdateBlogPage> {
-  late TextEditingController _nameController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _catagoryController;
-  bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.blogEntity.title);
-    _descriptionController = TextEditingController(text: widget.blogEntity.description);
-    _catagoryController = TextEditingController(text: widget.blogEntity.category);
-  }
+class _AddBlogPageState extends State<AddBlogPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController(); 
 
   void _clearAllFields() {
     setState(() {
       _nameController.clear();
       _descriptionController.clear();
-      _catagoryController.clear();
+      _categoryController.clear(); 
     });
   }
+    void _showLoadingDialog(String message) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (context) {
+      return AlertDialog(
+        content: Container(
+          width: 300, 
+          padding: const EdgeInsets.all(16.0), 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+               CircularProgressIndicator(color: commonColor,),
+              const SizedBox(width: 16),
+              Expanded(child: Text(message, textAlign: TextAlign.center)), 
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
-  void _updateBlog() {
+
+  void _saveBlog() {
     if (_nameController.text.isEmpty ||
         _descriptionController.text.isEmpty ||
-        _catagoryController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+        _categoryController.text.isEmpty) {
+      showCustomSnackBar(context, 'Please fill all the fields', false);
       return;
     }
 
-    final BlogEntity updatedBlogEntity = BlogEntity(
-      id: widget.blogEntity.id, 
+    final BlogEntity blogEntity  = BlogEntity(
+      id: 0,
       title: _nameController.text.trim(),
       description: _descriptionController.text.trim(),
-      category: _catagoryController.text.trim(),
-      date: widget.blogEntity.date,
+      category: _categoryController.text.trim(),
+      date: DateTime.now().toString(),
     );
-
-    BlocProvider.of<BlogBloc>(context).add(UpdateBlogEvent(blogEntity: updatedBlogEntity));
-  }
-
-  void _showLoadingDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false, 
-      builder: (context) {
-        return const AlertDialog(
-          content: Row(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 16),
-              Text('Updating blog...'),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _dismissLoadingDialog() {
-    if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
+    
+    BlocProvider.of<BlogBloc>(context).add(AddBlogEvent(blogEntity: blogEntity));
   }
 
   @override
@@ -92,24 +76,26 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
             icon: Icon(Icons.chevron_left, color: commonColor, size: 40),
             onPressed: () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const BlogPage()),
+              MaterialPageRoute(builder: (context) => const AddPage()),
             ),
           ),
-          title: const Text('Update Blog', style: TextStyle(color: Colors.black)),
+          title: const Text('Add Blog', style: TextStyle(color: Colors.black)),
         ),
         body: BlocListener<BlogBloc, BlogState>(
           listener: (context, state) {
-            if (state is BlogUpdateLoadingState) {
-              _showLoadingDialog();
-            } else if (state is UpdateBlogState) {
-              _dismissLoadingDialog();
+            if (state is BlogAddLoadingState) {
+              _showLoadingDialog('Creating a Blog');
+               
+            }
+
+            if (state is AddBlogState) {
+              Navigator.pop(context); 
               showCustomSnackBar(context, state.blogModel.responseMessage, state.blogModel.isRight);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const BlogPage()),
-              );
-            } else if (state is BlogErrorState) {
-              _dismissLoadingDialog();
+              _clearAllFields();
+            }
+
+            if (state is BlogErrorState) {
+              Navigator.pop(context);
               showCustomSnackBar(context, state.message, false);
             }
           },
@@ -125,8 +111,8 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  controller: _catagoryController,
-                  decoration: decorateInput('Category'),
+                  controller: _categoryController,
+                  decoration: decorateInput('Category'),  
                 ),
                 const SizedBox(height: 30),
                 TextField(
@@ -141,7 +127,7 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: OutlinedButton(
-                          onPressed: _updateBlog,
+                          onPressed: _saveBlog,
                           style: OutlinedButton.styleFrom(
                             backgroundColor: commonColor,
                             side: BorderSide(color: commonColor, width: 2),
@@ -150,7 +136,7 @@ class _UpdateBlogPageState extends State<UpdateBlogPage> {
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
                           ),
-                          child: const Text('UPDATE', style: TextStyle(color: Colors.white)),
+                          child: const Text('ADD', style: TextStyle(color: Colors.white)),
                         ),
                       ),
                       const SizedBox(height: 20),

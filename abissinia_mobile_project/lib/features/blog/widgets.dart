@@ -1,7 +1,10 @@
 import 'dart:math';
+import 'package:abissinia_mobile_project/features/blog/bloc/blog_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
+import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
 import 'package:abissinia_mobile_project/features/blog/update-blog-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BlogCard extends StatefulWidget {
   final BlogEntity blog;
@@ -87,6 +90,13 @@ class _BlogCardState extends State<BlogCard> {
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {
+                        BlocProvider.of<BlogBloc>(context).add(DeleteBlogEvent(id: widget.blog.id));
+                      //         Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const BlogPage()),
+                      // );
+
+
                       },
                     ),
                 ],

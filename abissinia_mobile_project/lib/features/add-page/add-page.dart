@@ -1,4 +1,4 @@
-import 'package:abissinia_mobile_project/features/blog/add-blog.dart';
+import 'package:abissinia_mobile_project/features/blog/add-blog-page.dart';
 import 'package:abissinia_mobile_project/features/faq/add-faq-page.dart';
 import 'package:abissinia_mobile_project/features/product/add-product-page.dart';
 import 'package:abissinia_mobile_project/features/service/add-services-page.dart';

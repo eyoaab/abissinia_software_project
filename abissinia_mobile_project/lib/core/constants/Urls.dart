@@ -1,4 +1,4 @@
-class Urls {
+class Url {
   static String servicesUrl() => "https://backend.abyssiniasoftware.com/api/service";
   static String servicesUrlById(String id) => 'https://backend.abyssiniasoftware.com/api/service/$id';
 
