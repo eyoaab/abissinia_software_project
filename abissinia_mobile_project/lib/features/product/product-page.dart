@@ -1,4 +1,5 @@
 import 'package:abissinia_mobile_project/core/store.dart';
+import 'package:abissinia_mobile_project/features/slider/bloc/slider_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:abissinia_mobile_project/features/product/bloc/product_bloc.dart';
@@ -24,7 +25,7 @@ class _ProductPageState extends State<ProductPage> {
     BlocProvider.of<ProductBloc>(context).add(LoadAllProductEvent());
   }
 
-  void _filterProduct(String query, List<ProductEntity> products) {
+ void _filterProduct(String query, List<ProductEntity> products) {
     if (query.isEmpty) {
       setState(() {
         filteredProducts = products;
@@ -40,94 +41,112 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.06),
-          child: Container(
-            color: Colors.green,
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Product Page',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+    return RefreshIndicator(
+        onRefresh: () {
+          context.read<ProductBloc>().add(LoadAllProductEvent());
+          context.read<SliderBloc>().add(LoadAllSliderEvent());
+
+          return Future.delayed(const Duration(seconds: 2));
+        },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.06),
+            child: Container(
+              color: Colors.green,
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Product Page',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        body: BlocBuilder<ProductBloc, ProductState>(
-          builder: (context, state) {
-            if (state is ProductLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ProductErrorState) {
-              return Center(child: Text('Error: ${state.message}'));
-            } else if (state is ProductLoadedState) {
-              final products = state.loadedProducts;
-              filteredProducts = filteredProducts.isEmpty ? products : filteredProducts;
-
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              decoration: commonSerchDecoration,
-                              onChanged: (value) {
-                                searchQuery = value;
-                                _filterProduct(searchQuery, products);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                           IconButton(
-                            icon: const Icon(Icons.logout, color: Colors.green), 
-                            onPressed: () {
-                              showLogoutDialog(context); 
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        height: 350, 
-                        child: SliderPage(isAdmin: widget.isAdmin),
-                      ),
-                      const SizedBox(height: 16),
-                      filteredProducts.isEmpty
-                          ? const Center(
-                              child: Text(
-                                'No product found',
-                                style: TextStyle(color: Colors.grey, fontSize: 20),
+          body: BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoadingState) {
+                return  Center(child: CircularProgressIndicator(color:commonColor));
+              } else if (state is ProductErrorState) {
+                return Center(child: Text('Error: ${state.message}'));
+              } else if (state is ProductLoadedState) {
+                  final products = state.loadedProducts;
+                
+                // If no search has been performed, initialize the filtered list with all products.
+                if (searchQuery.isEmpty) {
+                  filteredProducts = products;
+                }
+                // final products = state.loadedProducts;
+                // filteredProducts = filteredProducts.isEmpty ? products : filteredProducts;
+      
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: commonSerchDecoration,
+                                onChanged: (value) {
+                                  setState(() {
+                                  searchQuery = value;
+      
+                                    
+                                  });
+                                  _filterProduct(searchQuery, products);
+                                },
                               ),
-                            )
-                          : ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: filteredProducts.length,
-                              itemBuilder: (context, index) {
-                                return ProductCard(
-                                  productEntity: filteredProducts[index],
-                                  isAdmin: widget.isAdmin,
-                                );
+                            ),
+                            const SizedBox(width: 8),
+                             IconButton(
+                              icon: const Icon(Icons.logout, color: Colors.green), 
+                              onPressed: () {
+                                showLogoutDialog(context); 
                               },
                             ),
-                    ],
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 350, 
+                          child: SliderPage(isAdmin: widget.isAdmin),
+                        ),
+                        const SizedBox(height: 16),
+                        filteredProducts.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  'No product found',
+                                  style: TextStyle(color: Colors.grey, fontSize: 20),
+                                ),
+                              )
+                            : ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: filteredProducts.length,
+                                itemBuilder: (context, index) {
+                                  return ProductCard(
+                                    productEntity: filteredProducts[index],
+                                    isAdmin: widget.isAdmin,
+                                  );
+                                },
+                              ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }
-            return Container();
-          },
+                );
+              }
+              return Container();
+            },
+          ),
         ),
       ),
     );

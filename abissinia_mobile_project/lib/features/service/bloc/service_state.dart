@@ -11,6 +11,9 @@ final class ServiceInitial extends ServiceState {}
 final class ServiceLoadingState extends ServiceState{}
 final class ServiceUpdateLoadingState extends ServiceState{}
 final class ServiceAddLoadingState extends ServiceState{}
+final class ServiceDeletingState extends ServiceState{}
+
+
 
  final class ServiceErrorState extends ServiceState{
       final String message;

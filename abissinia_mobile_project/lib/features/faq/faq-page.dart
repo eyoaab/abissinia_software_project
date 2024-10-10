@@ -27,7 +27,15 @@ class _FaqPageState extends State<FaqPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return  RefreshIndicator(
+        onRefresh: () {
+          context.read<FaqBloc>().add(LoadAllFaqEvent());
+          return Future.delayed(const Duration(seconds: 2));
+        },
+    
+    
+    
+     child:SafeArea(
       child: Scaffold(
        appBar: PreferredSize(
           preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.06), 
@@ -90,7 +98,7 @@ class _FaqPageState extends State<FaqPage> {
                   },
                   child: BlocBuilder<FaqBloc, FaqState>(
                     builder: (context, state) {
-                      if (state is FaqLoadingState) {
+                      if (state is FaqLoadingState  ) {
                         return  Center(
                           child: CircularProgressIndicator(color: commonColor),
                         );
@@ -128,7 +136,7 @@ class _FaqPageState extends State<FaqPage> {
                       }
 
                       return const Center(
-                        child: Text('No Faqs available'),
+                        child: Text('No Faqs available Refresh For Updates'),
                       );
                     },
                   )
@@ -137,7 +145,7 @@ class _FaqPageState extends State<FaqPage> {
             ],
           ),
         ),
-      ),
+      ),)
     );
   }
 }

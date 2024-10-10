@@ -32,7 +32,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       }
     });
       on<DeleteBlogEvent>((event, emit) async {
-      emit(BlogLoadingState()); 
+      emit(BlogDeletingState()); 
       try {
         final BlogModel blogModel = await blogService.deleteBlog(event.id);
         emit(DeleteBlogState(blogModel: blogModel));

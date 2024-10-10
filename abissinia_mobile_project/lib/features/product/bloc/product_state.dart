@@ -10,6 +10,9 @@ final class ProductInitial extends ProductState {}
 final class ProductLoadingState extends ProductState{}
 final class ProductUpdateLoadingState extends ProductState{}
 final class ProductAddLoadingState extends ProductState{}
+final class ProductDeletingState extends ProductState{}
+
+
 
  final class ProductErrorState extends ProductState{
       final String message;

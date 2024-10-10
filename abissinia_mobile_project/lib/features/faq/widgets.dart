@@ -43,7 +43,7 @@ class _FaqCardState extends State<FaqCard> with SingleTickerProviderStateMixin {
   Widget _buildHeader() {
     return Text(
       widget.faq.question,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
     );
   }
 

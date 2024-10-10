@@ -9,6 +9,8 @@ final class SliderInitial extends SliderState {}
 final class SliderLoadingState extends SliderState{}
 final class SliderUpdateLoadingState extends SliderState{}
 final class SliderAddLoadingState extends SliderState{}
+final class SliderDeletingState extends SliderState{}
+
 
  final class SliderErrorState extends SliderState{
       final String message;

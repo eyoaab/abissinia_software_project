@@ -37,7 +37,7 @@ ProductBloc() : super(ProductInitial()) {
     });
 
      on<DeleteProductEvent>((event, emit) async {
-      emit(ProductLoadingState()); 
+      emit(ProductDeletingState()); 
       try {
         final ProductModel productModel = await productService.deleteProduct(event.id);
         emit(DeleteProductState(productModel: productModel));

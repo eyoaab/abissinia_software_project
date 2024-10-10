@@ -32,7 +32,7 @@ SliderBloc() : super(SliderInitial()) {
     });
 
      on<DeleteSliderEvent>((event, emit) async {
-      emit(SliderLoadingState()); 
+      emit(SliderDeletingState()); 
       try {
         final SliderModel sliderModel = await sliderService.deleteSlider(event.id);
         emit(DeleteSliderState(sliderModel: sliderModel));

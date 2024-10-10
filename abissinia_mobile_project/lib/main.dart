@@ -18,13 +18,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  // runApp(
-  //   DevicePreview(
-  //     builder: (context) => const MyApp(),
-  //   ),
-  // );
+  runApp(
+    DevicePreview(
+      builder: (context) => const MyApp(),
+    ),
+  );
   // runApp((context)=> MyApp());
-  runApp(const MyApp()); 
+  // runApp(const MyApp()); 
 
 }
 
@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ServiceBloc()),
       ],
       child: MaterialApp(
-        // locale: DevicePreview.locale(context),
-        // builder: DevicePreview.appBuilder,
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         title: 'Abissinia Software',
         theme: ThemeData(
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
             iconTheme: IconThemeData(color: Colors.black),
           ),
         ),
-        home:MainPage(selectedIndex: 0,isAdmin: true,),  
+        home:MainPage(isAdmin: true,selectedIndex: 0,) 
       ),
     );
   }

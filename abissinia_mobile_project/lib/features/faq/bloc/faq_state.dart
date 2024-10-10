@@ -7,6 +7,10 @@ final class FaqInitial extends FaqState {}
 final class FaqLoadingState extends FaqState{}
 final class FaqUpdateLoadingState extends FaqState{}
 final class FaqAddLoadingState extends FaqState{}
+final class FaqDeletingState extends FaqState{}
+
+
+
 
  final class FaqErrorState extends FaqState{
       final String message;

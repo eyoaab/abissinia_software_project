@@ -1,3 +1,4 @@
+import 'package:abissinia_mobile_project/core/network-info.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/user/bloc/user_bloc.dart'; 
 import 'package:abissinia_mobile_project/features/user/login-page.dart';
@@ -12,6 +13,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  // NetworkInfo networkInfo = NetworkInfo();
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -56,7 +58,11 @@ class _SignupPageState extends State<SignupPage> {
       _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
     });
   }
-  void signUpUser() {
+  void signUpUser()  {
+    //   if (await networkInfo.isConnected == false){
+    //   showCustomSnackBar(context, 'No internet! please cheack your Connection', false);
+    //   return;
+    // }
     if (_emailError != null || _isLoading) {
       return;
     }
@@ -223,7 +229,7 @@ class _SignupPageState extends State<SignupPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : signUpUser, // Disable button if loading
+                      onPressed: signUpUser, 
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         shape: RoundedRectangleBorder(
@@ -231,15 +237,8 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         backgroundColor: commonColor,
                       ),
-                      child: _isLoading 
-                          ? const SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            )
-                          : const Text(
+                      child:  _isLoading ? const CircularProgressIndicator(color:Colors.white,):
+                          const Text(
                               'Sign Up',
                               style: TextStyle(
                                 color: Colors.white,

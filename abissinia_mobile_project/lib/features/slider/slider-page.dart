@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/slider/bloc/slider_bloc.dart';
 import 'package:abissinia_mobile_project/features/slider/widget.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class _SliderPageState extends State<SliderPage> {
     return BlocBuilder<SliderBloc, SliderState>(
       builder: (context, state) {
         if (state is SliderLoadingState) {
-          return const Center(child: CircularProgressIndicator());
+          return  Center(child: CircularProgressIndicator(color:commonColor));
         } else if (state is SliderLoadedState) {
           final sliders = state.loadedSliders;
 
@@ -94,8 +95,13 @@ class _SliderPageState extends State<SliderPage> {
           );
         } else if (state is SliderErrorState) {
           return Center(child: Text('Error: ${state.message}'));
-        } else {
-          return const Center(child: Text('Something went wrong.'));
+        } else if(state is DeleteSliderState){
+         BlocProvider.of<SliderBloc>(context).add(LoadAllSliderEvent()); 
+         return const Center() ;       
+        }
+        else {
+         BlocProvider.of<SliderBloc>(context).add(LoadAllSliderEvent());
+          return const Center(child: Text('Something went wrong. plese Refresh the Seceen'));
         }
       },
     );

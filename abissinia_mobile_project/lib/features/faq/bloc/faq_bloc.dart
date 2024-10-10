@@ -32,7 +32,7 @@ class FaqBloc extends Bloc<FaqEvent, FaqState> {
     });
 
      on<DeleteFaqEvent>((event, emit) async {
-      emit(FaqLoadingState()); 
+      emit(FaqDeletingState()); 
       try {
         final FaqModel faqModel = await faqService.deleteFaq(event.id.toString());
         emit(DeleteFaqState(faqModel: faqModel));

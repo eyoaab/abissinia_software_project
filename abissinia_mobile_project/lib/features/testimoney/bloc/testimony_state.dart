@@ -9,6 +9,9 @@ final class TestimonyInitial extends TestimonyState {}
 final class TestimonyLoadingState extends TestimonyState{}
 final class TestimonyUpdateLoadingState extends TestimonyState{}
 final class TestimonyAddLoadingState extends TestimonyState{}
+final class TestimonyDeletingState extends TestimonyState{}
+
+
 
  final class TestimonyErrorState extends TestimonyState{
       final String message;

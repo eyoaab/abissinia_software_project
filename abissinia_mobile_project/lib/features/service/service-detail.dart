@@ -2,6 +2,7 @@ import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/service/bloc/service_bloc.dart';
 import 'package:abissinia_mobile_project/features/service/service-entity.dart';
 import 'package:abissinia_mobile_project/features/service/update-services-page.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,10 +25,41 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
   void initState() {
     super.initState();
   }
+    void _showLoadingDialog(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            width: 300,
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: commonColor),
+                const SizedBox(width: 16),
+                Expanded(child: Text(message, textAlign: TextAlign.center)),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return  BlocListener<ServiceBloc, ServiceState>(
+      listener: (context, state) {
+        if (state is DeleteServiceState) {
+          showCustomSnackBar(context, state.serviceModel.responseMessage, state.serviceModel.isRight);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainPage(isAdmin: widget.isAdmin, selectedIndex: 3)));
+        } else    if (state is ServiceDeletingState) {
+          _showLoadingDialog("Deleting Service...");
+      }
+      },
+    child:SafeArea(
       child: Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,7 +228,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
               ),
           ],
         ),
-      ),
+    )),
     );
   }
 }

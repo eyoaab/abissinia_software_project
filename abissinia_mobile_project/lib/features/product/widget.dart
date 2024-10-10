@@ -2,6 +2,7 @@ import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/product/product-detail-page.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductEntity productEntity;
@@ -76,11 +77,15 @@ class ProductCard extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 10.0, bottom: 10),
                     child: Text(
                       productEntity.title,
+                      
                       textAlign: TextAlign.start,
-                      style: const TextStyle(
+                      style:  GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w400,
+                        // fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
+                    ),
                     ),
                   ),
                 ],

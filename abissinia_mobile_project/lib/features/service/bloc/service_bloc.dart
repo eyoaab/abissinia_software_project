@@ -33,7 +33,7 @@ ServiceBloc() : super(ServiceInitial()) {
     });
 
      on<DeleteServiceEvent>((event, emit) async {
-      emit(ServiceLoadingState()); 
+      emit(ServiceDeletingState()); 
       try {
         final ServiceModel serviceModel = await serviceService.deleteServic(event.id);
         emit(DeleteServiceState(serviceModel: serviceModel));

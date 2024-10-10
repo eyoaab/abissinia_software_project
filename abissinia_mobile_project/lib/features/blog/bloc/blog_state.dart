@@ -7,6 +7,8 @@ final class BlogInitial extends BlogState {}
 final class BlogLoadingState extends BlogState{}
 final class BlogUpdateLoadingState extends BlogState{}
 final class BlogAddLoadingState extends BlogState{}
+final class BlogDeletingState extends BlogState{}
+
 
 
 final class BlogLoadedState extends BlogState{

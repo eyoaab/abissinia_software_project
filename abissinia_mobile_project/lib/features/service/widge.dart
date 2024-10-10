@@ -12,7 +12,7 @@ class ServiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: const EdgeInsets.only(bottom: 20.0,left:10,right:10),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -26,7 +26,7 @@ class ServiceCard extends StatelessWidget {
           );
         },
         child: Card(
-          elevation: 5,
+          elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),

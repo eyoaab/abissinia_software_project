@@ -1,3 +1,4 @@
+import 'package:abissinia_mobile_project/core/network-info.dart';
 import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/user/bloc/user_bloc.dart';
 import 'package:abissinia_mobile_project/features/user/sign-up-page.dart';
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // NetworkInfo networkInfo = NetworkInfo();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
@@ -27,7 +29,11 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void _logInUser() {
+  void _logInUser() async{
+    // if (await networkInfo.isConnected == false){
+    //   showCustomSnackBar(context, 'No internet! please cheack your Connection', false);
+    //   return;
+    // }
     final String username = _usernameController.text.trim();
     final String password = _passwordController.text.trim();
 
@@ -71,6 +77,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 );
               } else {
+                setState(() {
+                  _isLoading = false;
+                });
                 showCustomSnackBar(context, state.userModel.responseMessage, state.userModel.isRight);
               }
             }else if (state is LoaginLoadingState) {
@@ -192,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           backgroundColor: commonColor,
                         ),
-                        child: const Text(
+                        child: _isLoading ? const CircularProgressIndicator(color:Colors.white):const Text(
                           'Log in',
                           style: TextStyle(
                             color: Colors.white,

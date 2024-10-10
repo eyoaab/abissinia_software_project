@@ -5,6 +5,7 @@ import 'package:abissinia_mobile_project/features/product/update-product-page.da
 import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final ProductEntity productEntity;
@@ -21,10 +22,41 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
   }
+    void _showLoadingDialog(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          content: Container(
+            width: 300,
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: commonColor),
+                const SizedBox(width: 16),
+                Expanded(child: Text(message, textAlign: TextAlign.center)),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return BlocListener<ProductBloc, ProductState>(
+      listener: (context, state) {
+        if (state is DeleteProductState) {
+          showCustomSnackBar(context, state.productModel.responseMessage, state.productModel.isRight);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainPage(isAdmin: widget.isAdmin, selectedIndex: 0)));
+       } else   if (state is ProductDeletingState) {
+          _showLoadingDialog("Deleting Product...");
+      }
+      },
+    child: SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
@@ -85,10 +117,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   children: [
                     Text(
                       widget.productEntity.title,
-                      style: const TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    style: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
                     ),
                     const SizedBox(height: 8.0),
                     Row(
@@ -195,7 +230,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildPlaceholderImage() {

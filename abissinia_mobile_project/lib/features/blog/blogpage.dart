@@ -91,8 +91,8 @@ class _BlogPageState extends State<BlogPage> {
                   child: BlocBuilder<BlogBloc, BlogState>(
                     builder: (context, state) {
                       if (state is BlogLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return  Center(
+                          child: CircularProgressIndicator(color: commonColor,),
                         );
                       } else if (state is BlogLoadedState) {
                         List<BlogEntity> filteredBlogs = state.loadedBlogs

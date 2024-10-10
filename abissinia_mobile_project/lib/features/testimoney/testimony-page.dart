@@ -110,10 +110,10 @@ class _TestimonyPageState extends State<TestimonyPage> {
                           },
                         );
                       } else if (state is TestimonyErrorState) {
-                        return Center(
+                        return const Center(
                           child: Text(
-                            state.message,
-                            style: const TextStyle(color: Colors.red, fontSize: 20),
+                            'somthing went wrong please refresh the screen',
+                            textAlign: TextAlign.center,
                           ),
                         );
                       }

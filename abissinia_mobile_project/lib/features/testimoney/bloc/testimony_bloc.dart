@@ -32,7 +32,7 @@ TestimonyBloc() : super(TestimonyInitial()) {
     });
 
      on<DeleteTestimonyEvent>((event, emit) async {
-      emit(TestimonyLoadingState()); 
+      emit(TestimonyDeletingState()); 
       try {
         final TestimonyModel testimonyModel = await testimonyService.deleteTestimony(event.id);
         emit(DeleteTestimonyState(testimonyModel: testimonyModel));
