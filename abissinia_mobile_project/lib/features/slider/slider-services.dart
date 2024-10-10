@@ -7,6 +7,11 @@ import 'package:http/http.dart' as http;
 import 'package:abissinia_mobile_project/features/slider/slider-entity.dart';
 import 'package:http_parser/http_parser.dart';
 
+import 'package:mime/mime.dart'; 
+
+import 'dart:typed_data'; // For Uint8List
+import 'package:flutter/foundation.dart'; // For kIsWeb
+
 class SliderService{
 Future<SliderModel> addsliders(SlidersSend Slidere) async {
   try {
@@ -32,6 +37,7 @@ Future<SliderModel> addsliders(SlidersSend Slidere) async {
   }
 }
 
+
 Future<List<SliderEntity>> getAllSliders() async {
     try {
       final response = await http.get(Uri.parse(Url.sliderUrl()));
@@ -51,7 +57,7 @@ Future<List<SliderEntity>> getAllSliders() async {
 ;          
         }
         
-        
+       
         return sliders;
       } else {
         return [];
@@ -62,7 +68,7 @@ Future<List<SliderEntity>> getAllSliders() async {
   }
 
 Future<SliderModel> updatesliders(SlidersSend Slidere) async {
-  try {
+   try {
     var request = http.MultipartRequest('PUT', Uri.parse(Url.sliderUrlById(Slidere.id.toString())));
       request.fields['id'] = Slidere.id.toString();
       request.fields['title'] = Slidere.title;

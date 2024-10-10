@@ -67,10 +67,12 @@ class _FaqPageState extends State<FaqPage> {
                     ),
                   ),
                   const SizedBox(width: 8), 
-                  const Icon(
-                    Icons.menu,
-                    color: Colors.green,
-                  ),
+                   IconButton(
+                  icon: const Icon(Icons.logout, color: Colors.green), 
+                  onPressed: () {
+                    showLogoutDialog(context); 
+                  },
+                ),
                 ],
               ),
               const SizedBox(height: 16),            

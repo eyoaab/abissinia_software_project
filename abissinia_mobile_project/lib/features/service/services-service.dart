@@ -12,10 +12,11 @@ class ServicesServise{
 
 Future<ServiceModel> addServices(ServiceSend service) async {
   try {
+ 
     var request = http.MultipartRequest('POST', Uri.parse(Url.servicesUrl()));
       request.fields['title'] = service.title;
       request.fields['pricing'] = service.price.toString();
-      request.fields['description'] = service.description;
+      request.fields['description'] = service.description.toString();
       request.fields['catagory'] = service.category.toString();
       request.fields['time'] = service.time.toString();
       request.files.add(await http.MultipartFile.fromPath(
@@ -24,7 +25,8 @@ Future<ServiceModel> addServices(ServiceSend service) async {
         contentType: MediaType('image','jpg')));
    
     var response = await request.send();
-    if (response.statusCode == 201) {
+    log(response.toString());
+    if (response.statusCode == 201 || response.statusCode == 200 ) {
       var serviceModel = const ServiceModel(responseMessage: 'service created succesfully', isRight: true);
       return serviceModel;
     } else {
@@ -42,8 +44,6 @@ Future<List<ServiceEntity>> getAllServices() async {
       final response = await http.get(Uri.parse(Url.servicesUrl()));
 
       if (response.statusCode == 200) {
-          log('stateus');
-        log(response.body.toString());
         final jsonData = json.decode(response.body)['services'] as List;
 
         List<ServiceEntity> services = [];

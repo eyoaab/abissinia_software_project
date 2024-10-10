@@ -21,7 +21,7 @@ class _ServicePageState extends State<ServicePage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ServiceBloc>(context).add(LoadAllServiceEvent()); // Load services on init
+    BlocProvider.of<ServiceBloc>(context).add(LoadAllServiceEvent()); 
   }
 
   void _filterServices(String query, List<ServiceEntity> services) {
@@ -68,10 +68,12 @@ class _ServicePageState extends State<ServicePage> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(
-                    Icons.menu,
-                    color: Colors.green,
-                  ),
+                  IconButton(
+                  icon: const Icon(Icons.logout, color: Colors.green), 
+                  onPressed: () {
+                    showLogoutDialog(context); 
+                  },
+                ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -79,7 +81,7 @@ class _ServicePageState extends State<ServicePage> {
                 child: BlocBuilder<ServiceBloc, ServiceState>(
                   builder: (context, state) {
                     if (state is ServiceLoadingState) {
-                      return const Center(child: CircularProgressIndicator());
+                      return  Center(child: CircularProgressIndicator(color: commonColor,));
                     } else if (state is ServiceLoadedState) {
                       List<ServiceEntity> filteredService = state.loadedServices;
                       if (searchQuery.isNotEmpty) {

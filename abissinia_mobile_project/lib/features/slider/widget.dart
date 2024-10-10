@@ -9,7 +9,7 @@ class SliderCard extends StatelessWidget {
   final SliderEntity sliderEntity;
   final bool isAdmin;
 
-  const SliderCard({required this.sliderEntity, required this.isAdmin});
+  const SliderCard({required this.sliderEntity, required this.isAdmin, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,47 +28,37 @@ class SliderCard extends StatelessWidget {
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0),
               ),
-              child: Image.network(
-                sliderEntity.image,
-                height: 250,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  } else {
-                    return Container(
-                      height: 200,
+              child: sliderEntity.image.isNotEmpty
+                  ? Image.network(
+                      sliderEntity.image,
+                      height: 250,
                       width: double.infinity,
-                      color: Colors.grey.shade200,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  (loadingProgress.expectedTotalBytes ?? 1)
-                              : null,
-                        ),
-                      ),
-                    );
-                  }
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 200,
-                    width: double.infinity,
-                    color: Colors.grey.shade200,
-                    child: const Center(
-                      child: Icon(
-                        Icons.error,
-                        color: Colors.red,
-                        size: 40,
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Container(
+                            height: 250, 
+                            width: double.infinity,
+                            color: Colors.grey.shade200,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ?? 1)
+                                    : null,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return _buildPlaceholder();
+                      },
+                    )
+                  : _buildPlaceholder(),
             ),
-
             Padding(
               padding: const EdgeInsets.all(0.0),
               child: Row(
@@ -76,12 +66,12 @@ class SliderCard extends StatelessWidget {
                 children: [
                   if (isAdmin)
                     IconButton(
-                      icon:  Icon(Icons.edit, color: commonColor,size :40),
+                      icon: Icon(Icons.edit, color: commonColor, size: 40),
                       onPressed: () {
                         Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) =>  UpdateSliderPage(slider:sliderEntity)),
-            ) ;
+                          context,
+                          MaterialPageRoute(builder: (context) => UpdateSliderPage(slider: sliderEntity)),
+                        );
                       },
                     ),
                   Expanded(
@@ -96,16 +86,30 @@ class SliderCard extends StatelessWidget {
                   ),
                   if (isAdmin)
                     IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red,size :40),
+                      icon: const Icon(Icons.delete, color: Colors.red, size: 40),
                       onPressed: () {
-                  BlocProvider.of<SliderBloc>(context).add(DeleteSliderEvent(id: sliderEntity.id));
-
+                        BlocProvider.of<SliderBloc>(context).add(DeleteSliderEvent(id: sliderEntity.id));
                       },
                     ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      height: 250,
+      width: double.infinity,
+      color: Colors.grey.shade200,
+      child:  Center(
+        child: Icon(
+          Icons.broken_image,
+          color: commonColor,
+          size: 80,
         ),
       ),
     );

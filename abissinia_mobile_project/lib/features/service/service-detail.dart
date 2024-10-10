@@ -55,6 +55,20 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: 300,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                width: double.infinity,
+                                height: 300,
+                                color: Colors.grey[300], 
+                                child:  Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: commonColor,
+                                    size: 50,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Positioned(
@@ -145,12 +159,12 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                     OutlinedButton(
                       onPressed: () {
                         Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) =>  UpdateServicePage(service: widget.serviceEntity,)),
-            );
+                          context,
+                          MaterialPageRoute(builder: (context) => UpdateServicePage(service: widget.serviceEntity)),
+                        );
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: commonColor,
                         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 30.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -163,8 +177,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                     ),
                     OutlinedButton(
                       onPressed: () {
-                        BlocProvider.of<ServiceBloc>(context).add(DeleteServiceEvent(id:widget.serviceEntity.id));
-
+                        BlocProvider.of<ServiceBloc>(context).add(DeleteServiceEvent(id: widget.serviceEntity.id));
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.red,

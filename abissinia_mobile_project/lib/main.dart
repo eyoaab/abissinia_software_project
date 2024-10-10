@@ -18,12 +18,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-// //   // runApp(
-// //   //   DevicePreview(
-// //   //     builder: (context) => const MyApp(),
-// //   //   ),
-// //   // );
-// //   runApp((context)=> MyApp());
+  // runApp(
+  //   DevicePreview(
+  //     builder: (context) => const MyApp(),
+  //   ),
+  // );
+  // runApp((context)=> MyApp());
   runApp(const MyApp()); 
 
 }
@@ -81,10 +81,8 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    // Set the initial selected index from the passed value
     _selectedIndex = widget.selectedIndex;
 
-    // Initialize pages, with AddPage for admin users
     _pages = [
       ProductPage(isAdmin: widget.isAdmin),
       BlogPage(isAdmin: widget.isAdmin),
@@ -103,53 +101,69 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: _selectedIndex == 0 ? Colors.green : Colors.grey,
-            ),
-            label: 'Products',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.article,
-              color: _selectedIndex == 1 ? Colors.green : Colors.grey,
-            ),
-            label: 'Blogs',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.help,
-              color: _selectedIndex == 2 ? Colors.green : Colors.grey,
-            ),
-            label: 'FAQ',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.build,
-              color: _selectedIndex == 3 ? Colors.green : Colors.grey,
-            ),
-            label: 'Services',
-          ),
-          // AddPage option only for admin users
-          if (widget.isAdmin)
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add,
-                color: _selectedIndex == 4 ? Colors.green : Colors.grey,
-              ),
-              label: 'Add',
-            ),
-        ],
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: _pages[_selectedIndex],
+    bottomNavigationBar: BottomNavigationBar(
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
+      iconSize: 30, 
+      elevation: 8,
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.green, 
+      unselectedItemColor: Colors.grey, 
+      selectedLabelStyle: const TextStyle(
+        fontSize: 14, 
+        fontWeight: FontWeight.bold, 
       ),
-    );
-  }
+      unselectedLabelStyle: const TextStyle(
+        fontSize: 12, 
+        fontWeight: FontWeight.normal, 
+      ),
+      type: BottomNavigationBarType.fixed, 
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.home,
+            color: _selectedIndex == 0 ? Colors.green : Colors.grey,
+          ),
+          label: 'Products',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.article,
+            color: _selectedIndex == 1 ? Colors.green : Colors.grey,
+          ),
+          label: 'Blogs',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.help,
+            color: _selectedIndex == 2 ? Colors.green : Colors.grey,
+          ),
+          label: 'FAQ',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.build,
+            color: _selectedIndex == 3 ? Colors.green : Colors.grey,
+          ),
+          label: 'Services',
+        ),
+        if (widget.isAdmin)
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.add,
+              color: _selectedIndex == 4 ? Colors.green : Colors.grey,
+            ),
+            label: 'Add',
+          ),
+      ],
+    ),
+  );
 }
+
+    
+  }
+

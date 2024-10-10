@@ -2,6 +2,7 @@ import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/product/bloc/product_bloc.dart';
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
 import 'package:abissinia_mobile_project/features/product/update-product-page.dart';
+import 'package:abissinia_mobile_project/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,19 +43,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ],
                     ),
                     clipBehavior: Clip.hardEdge,
-                    child: Image.network(
-                      widget.productEntity.image,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 300,
-                    ),
+                    child: widget.productEntity.image != null && widget.productEntity.image!.isNotEmpty
+                        ? Image.network(
+                            widget.productEntity.image!,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 300,
+                            errorBuilder: (context, error, stackTrace) {
+                              return _buildPlaceholderImage();
+                            },
+                          )
+                        : _buildPlaceholderImage(),
                   ),
                   Positioned(
                     top: 16.0,
                     left: 16.0,
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
+                      onTap: () {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainPage(isAdmin: widget.isAdmin, selectedIndex: 0)))
+                       ;
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8.0),
@@ -72,7 +78,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ],
               ),
               const SizedBox(height: 16.0),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
@@ -100,12 +105,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ],
                     ),
                     const SizedBox(height: 16.0),
-                    Text(
-                      widget.productEntity.description,
-                      style: const TextStyle(fontSize: 16.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          
+                          widget.productEntity.description,
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16.0),
-
                     const Text(
                       'Features',
                       style: TextStyle(
@@ -114,10 +124,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 8.0),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: widget.productEntity.features.map((feature) {
-                        return Padding(
+                    
+                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,15 +133,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               const Text("• ", style: TextStyle(fontSize: 16.0)),
                               Expanded(
                                 child: Text(
-                                  feature,
+                                  widget.productEntity.features,
                                   style: const TextStyle(fontSize: 16.0),
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      }).toList(),
-                    ),
+                        )
+                     
+                    
                   ],
                 ),
               ),
@@ -145,13 +153,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       OutlinedButton(
                         onPressed: () {
-                        Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  UpdateProductPage(productEntity: widget.productEntity,)),
-                      );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UpdateProductPage(productEntity: widget.productEntity),
+                            ),
+                          );
                         },
                         style: OutlinedButton.styleFrom(
-                          backgroundColor:commonColor,
+                          backgroundColor: commonColor,
                           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 30.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -164,8 +174,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       OutlinedButton(
                         onPressed: () {
-                         BlocProvider.of<ProductBloc>(context).add(DeleteProductEvent(id:widget.productEntity.id));
-
+                          BlocProvider.of<ProductBloc>(context).add(DeleteProductEvent(id: widget.productEntity.id));
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -184,6 +193,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholderImage() {
+    return Container(
+      height: 300,
+      width: double.infinity,
+      color: Colors.grey.shade200,
+      child:  Center(
+        child: Icon(
+          Icons.image_not_supported,
+          color: commonColor,
+          size: 60,
         ),
       ),
     );

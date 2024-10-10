@@ -1,3 +1,4 @@
+import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/service/service-detail.dart';
 import 'package:abissinia_mobile_project/features/service/service-entity.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,16 @@ class ServiceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
-        onTap: (){
-            Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>  ServiceDetailPage(serviceEntity: serviceEntity,isAdmin:isAdmin),
-                    ));
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ServiceDetailPage(
+                serviceEntity: serviceEntity,
+                isAdmin: isAdmin,
+              ),
+            ),
+          );
         },
         child: Card(
           elevation: 5,
@@ -34,7 +39,7 @@ class ServiceCard extends StatelessWidget {
                   topRight: Radius.circular(10.0),
                 ),
                 child: Image.network(
-                  serviceEntity.image,
+                  serviceEntity.image ?? '', 
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -43,7 +48,7 @@ class ServiceCard extends StatelessWidget {
                       return child;
                     } else {
                       return Container(
-                        height: 130,
+                        height: 200,
                         width: double.infinity,
                         color: Colors.grey.shade200,
                         child: Center(
@@ -59,23 +64,22 @@ class ServiceCard extends StatelessWidget {
                   },
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
-                      height: 130,
+                      height: 200,
                       width: double.infinity,
                       color: Colors.grey.shade200,
-                      child: const Center(
+                      child:  Center(
                         child: Icon(
-                          Icons.error,
-                          color: Colors.red,
-                          size: 40,
+                          Icons.broken_image,
+                          color: commonColor,
+                          size: 50,
                         ),
                       ),
                     );
                   },
                 ),
               ),
-        
               Padding(
-                padding: const EdgeInsets.only(left: 10.0,bottom:10),
+                padding: const EdgeInsets.only(left: 10.0, bottom: 10),
                 child: Text(
                   serviceEntity.title,
                   textAlign: TextAlign.start,
@@ -85,14 +89,10 @@ class ServiceCard extends StatelessWidget {
                   ),
                 ),
               ),
-        
-            
             ],
           ),
         ),
       ),
     );
   }
-
- 
 }

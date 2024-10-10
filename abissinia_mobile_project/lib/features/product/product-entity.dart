@@ -8,7 +8,7 @@ class ProductSend{
     String description;
     File image; 
     double price;
-    final List<String> features;
+    final String features;
 
     
    ProductSend({
@@ -31,13 +31,14 @@ class ProductSend{
      });
     }
 
-    class ProductEntity {
+
+class ProductEntity {
   final int id;
   final String title;
   final String description;
-  final String image;
+  final String? image;
   final double pricing;
-  final List<String> features;
+  final String features;
 
   ProductEntity({
     required this.id,
@@ -49,23 +50,19 @@ class ProductSend{
   });
 
   factory ProductEntity.fromJson(Map<String, dynamic> json) {
-    List<String> featureList = [];
-    if (json['features'] != null) {
-      var featuresJson = jsonDecode(json['features']);
-      for (var feature in featuresJson) {
-        featureList.add(feature);
-      }
-    }
+  
     return ProductEntity(
       id: json['id'] as int,
       title: json['title'] as String,
-      description: json['description'] as String,
-      image: json['image'] != null ? json['image'] as String : 'default_image_url',
-
-      pricing: json['pricing'].toDouble(),
-      features: featureList,
+      description: json['description'] as String? ?? 'No description provided',
+      image: json['image'] != null ? json['image'] as String : null,
+      pricing: (json['pricing'] as num).toDouble(),
+      features: json['features']
+        
     );
   }
+
+
 
   Map<String, dynamic> toJson() {
     return {

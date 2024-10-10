@@ -14,12 +14,12 @@ class AddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> cardItems = [
-      {'icon': Icons.person, 'name': 'John Doe'},
-      {'icon': Icons.shopping_cart, 'name': 'Shopping'},
-      {'icon': Icons.home, 'name': 'Home'},
-      {'icon': Icons.work, 'name': 'Work'},
-      {'icon': Icons.school, 'name': 'School'},
-      {'icon': Icons.settings, 'name': 'Settings'},
+      {'icon': Icons.add_shopping_cart, 'name': 'Add Product'},
+      {'icon': Icons.business_center, 'name': 'Add Service'},
+      {'icon': Icons.article, 'name': 'Add Blog'},
+      {'icon': Icons.rate_review, 'name': 'Add Testimony'},
+      {'icon': Icons.question_answer, 'name': 'Add FAQ'},
+      {'icon': Icons.slideshow, 'name': 'Add Slider'},
     ];
 
     final List<VoidCallback> navigations = [
@@ -51,11 +51,27 @@ class AddPage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Add Cards Page'),
+        appBar: PreferredSize(
+          preferredSize: Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.06),
+          child: Container(
+            color: Colors.green,
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Add Page',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 8.0,right:8.0,top:25),
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

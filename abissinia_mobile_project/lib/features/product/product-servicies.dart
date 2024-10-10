@@ -39,12 +39,14 @@ Future<ProductModel> addproducts(ProductSend product) async {
       final response = await http.get(Uri.parse(Url.productUrl()));
 
       if (response.statusCode == 200) {
-     
         final jsonData = json.decode(response.body)['products'] as List;
 
-        List<ProductEntity> products = [];
-        for (var item in jsonData) {
-          products.add(ProductEntity.fromJson(item));
+          List<ProductEntity> products = [];
+          for (var item in jsonData) {
+            products.add(ProductEntity.fromJson(item));
+          }
+         for (final product in products) {
+          log('Product: ${product.toString()}');
         }
 
         return products;

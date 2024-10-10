@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:abissinia_mobile_project/features/product/product-entity.dart';
 import 'package:abissinia_mobile_project/features/product/product-servicies.dart';
 import 'package:bloc/bloc.dart';
@@ -14,6 +16,9 @@ ProductBloc() : super(ProductInitial()) {
       emit(ProductLoadingState()); 
       try {
         final List<ProductEntity> Products = await productService.getAllProducts(); 
+         for (final product in Products) {
+      log('Product: ${product.toString()}');
+    }
         emit(ProductLoadedState(loadedProducts: Products));
       } catch (error) {
         emit(ProductErrorState(message: 'Failed to load Products: $error'));
@@ -46,6 +51,9 @@ ProductBloc() : super(ProductInitial()) {
       try {
         final ProductModel productModel = await productService.addproducts(event.productEntity);
         emit(AddProductState(productModel: productModel));
+        log('adding response');
+        log(productModel.responseMessage);
+        
        
       } catch (error) {
         emit(ProductErrorState(message: 'Failed to add Product: $error'));

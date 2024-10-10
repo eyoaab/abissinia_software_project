@@ -21,12 +21,10 @@ class _SliderPageState extends State<SliderPage> {
   void initState() {
     super.initState();
     
-    // Trigger the loading of sliders when the page initializes
     BlocProvider.of<SliderBloc>(context).add(LoadAllSliderEvent());
 
     _pageController = PageController(initialPage: 0);
 
-    // Set up automatic page switching every 5 seconds
     _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       if (context.read<SliderBloc>().state is SliderLoadedState) {
         final sliders = (context.read<SliderBloc>().state as SliderLoadedState).loadedSliders;
@@ -82,7 +80,7 @@ class _SliderPageState extends State<SliderPage> {
                             height: 100,
                             child: SliderCard(
                               sliderEntity: sliders[index],
-                              isAdmin: widget.isAdmin,  // Adjust if you have admin logic
+                              isAdmin: widget.isAdmin, 
                             ),
                           ),
                         );
@@ -95,10 +93,8 @@ class _SliderPageState extends State<SliderPage> {
             ],
           );
         } else if (state is SliderErrorState) {
-          // Show an error message if fetching sliders fails
           return Center(child: Text('Error: ${state.message}'));
         } else {
-          // Default fallback in case of an unhandled state
           return const Center(child: Text('Something went wrong.'));
         }
       },

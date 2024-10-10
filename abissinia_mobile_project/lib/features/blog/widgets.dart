@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:abissinia_mobile_project/core/store.dart';
 import 'package:abissinia_mobile_project/features/blog/bloc/blog_bloc.dart';
 import 'package:abissinia_mobile_project/features/blog/blog-entity.dart';
 import 'package:abissinia_mobile_project/features/blog/blogpage.dart';
@@ -66,7 +67,7 @@ class _BlogCardState extends State<BlogCard> {
                 children: [
                   if (widget.isAdmin) 
                     IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      icon:  Icon(Icons.edit, color: commonColor),
                       onPressed: () {
                         Navigator.pushReplacement(
               context,
